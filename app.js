@@ -674,25 +674,20 @@
 
 
 
-
 })(jQuery);
 
 
 $(document).ready( function () {
 
-    $('#laceup-meta').laceUpUserStatus();
+    $('#laceup-meta')
+        .laceUpUserStatus()
+        .laceUpRecentActivities()
+        .laceUpLeaderboard()
+        .laceUpStagePodium()
+        .laceUpStageRanking()
+        .laceUpOverallRanking()
+        .laceUpSupporter();
 
-    $('#laceup-meta').laceUpRecentActivities();
-
-    $('#laceup-meta').laceUpLeaderboard();
-
-    $('#laceup-meta').laceUpStagePodium();
-
-    $('#laceup-meta').laceUpStageRanking();
-
-    $('#laceup-meta').laceUpOverallRanking();
-
-    $('#laceup-meta').laceUpSupporter();
 
     //jump to newsticker after pagination click (instead of top)
     $('#newsticker .w-pagination-wrapper a').each(function() {
