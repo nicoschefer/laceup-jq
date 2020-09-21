@@ -27,6 +27,8 @@ $(document).ready( function () {
 
                     if(data.tour.slug === globalTourSlug){
 
+                        console.log("Slug matched: "+globalTourSlug);
+                        console.log(data);
 
                         $("div.join").hide(); //has already joined
 
