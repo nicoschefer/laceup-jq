@@ -299,4 +299,84 @@ $(document).ready( function () {
         $(this).attr('href',	$(this).attr('href')+'#newsticker');
     });
 
+
+
+
+    $('table.ranking').each(function(index, el) {
+        $(el).DataTable({
+            "ajax": {
+                url: globalAppURL+"/api/overall_rankings?tour.slug="+globalTourSlug+"&sex="+$(el).data('sex')+"&pagination=false",
+                dataSrc: ""
+            },
+            "processing": true,
+            "paging": false,
+            "ordering": false,
+            "searching": false,
+            "info": false,
+            "responsive": true,
+            "language": {
+                "emptyTable": "Noch keine Resultate"
+            },
+            "columns": [
+                { "data": "rank" },
+                {
+                    "data": "athlete.profile",
+                    "render": function(data, type, row) {
+
+                        return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
+                            '<div class="profile-img" style="width: 32px; height: 32px; border-radius: 50%; background-position: center; background-size: cover; background-image: url('+data+');"></div>'+
+                            (row.athlete.paid ? '<a class="ranking-paid-badge" title="Unterstützer" href="'+globalAppURL+'/tour/'+globalTourSlug+'/donate">'+paidSVGBadge+'</a>' : '')+
+                            '</div';
+
+                    }
+                },
+                {
+                    "data": "athlete.name",
+                    "render": function(name, type, row) {
+                        return '<a style="text-decoration: none;" href="https://strava.com/athletes/'+row.athlete.strava_id+'" target="_blank">'+name+'</a>';
+                    }
+                },
+                {
+                    "data": "number_of_stages"
+                },
+                {
+                    "data": "ranking_time",
+                    "render": function(data, type, row) {
+                        return '<span class="ranking-time">'+data+'</span>';
+                    }
+                },
+                {
+                    "render": function(data, type, row) {
+                        var lag = "";
+                        if (row.rank > 1 && row.stage_lag == 0) {
+                            lag = row.time_to_first_formatted;
+                        }
+                        return '<span class="ranking-time ranking-time-back">'+lag+'</span>'; //maybe add some formatting?
+                    }
+                }
+            ],
+            columnDefs: [
+                { responsivePriority: 1, targets: 0, width: '5%' }, // rank
+                { responsivePriority: 2, targets: 1, width: '10%' }, // profile
+                { responsivePriority: 3, targets: 2, width: '60%' }, // name
+                { responsivePriority: 6, targets: 3, width: '5%' }, // stages
+                { responsivePriority: 4, targets: 4, className: 'dt-body-right', width: '10%' }, // time
+                { responsivePriority: 5, targets: 5, className: 'dt-body-right', width: '10%' } // time back
+            ],
+            "drawCallback": function ( settings ) {
+                var api = this.api();
+                var rows = api.rows( {page: 'current'} ).nodes();
+                var last = null;
+                api.column(3, {page: 'current'} ).data().each( function ( group, i ) {
+                    if ( last !== group ) {
+                        $(rows).eq( i ).before(
+                            '<tr style="text-align: center;"><td colspan="6">'+group+' Etappe(n)</td></tr>'
+                        );
+                        last = group;
+                    }
+                });
+            }
+        });
+    });
+
 });
