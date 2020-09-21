@@ -1,0 +1,101 @@
+.recent-time a {
+    text-decoration: none;
+}
+.recent-time .recent-ranking {
+    font-family: monospace;
+    position: relative;
+    left:6px;  /*copensate padding and border */
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+}
+.recent-time .recent-ranking.recent-ranking-1 {
+    background-color: #ffd70038;
+    border: 1px solid gold;
+}
+.recent-time .recent-ranking.recent-ranking-2 {
+    background-color: #c0c0c038;
+    border: 1px solid silver;
+}
+.recent-time .recent-ranking.recent-ranking-3 {
+    background-color: #cd7f3230;
+    border: 1px solid #cd7f32;
+}
+
+
+.recent-item .recent-profile > .profile-img {
+    border:2px solid transparent;
+}
+.recent-item.recent-item-paid .recent-profile > .profile-img {
+    border:2px solid #ffc800;
+}
+
+.recent-profile {
+    position: relative;
+}
+.recent-item.recent-item-paid .recent-profile svg {
+    width: 18px;
+    position: absolute;
+    top: -10px;
+    right: 4px;
+}
+
+
+.result-name:empty:after {
+    content: "Noch kein Resultat";
+    opacity:0.2;
+}
+
+.result-time, .recent-time{
+    font-family: monospace;
+    opacity: 0.85;
+    font-size: 0.95em;
+}
+.result-rank > div {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    background-color: #f1f1f1;
+    color: black;
+
+}
+.result-rank-1 .result-rank > div {
+    color: white;
+    background-color: gold;
+}
+.result-rank-2 .result-rank > div {
+    color: white;
+    background-color: silver;
+}
+.result-rank-3 .result-rank > div {
+    color: white;
+    background-color: #cd7f32;
+}
+
+.podium .result-rank > div { /*stage, not overall ranking badge*/
+    opacity: 0.75;
+}
+
+.ticker-item a {
+    display: inline;
+}
+
+
+.truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+
+.fancybox-slide--iframe .fancybox-content iframe {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.fancybox-slide--iframe .fancybox-content {
+    background: transparent;
+    max-width: 600px;
+    min-height: 500px;
+    max-height: 600px;
+    width: 100%;
+    margin: 0;
+}
