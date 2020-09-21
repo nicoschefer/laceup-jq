@@ -125,7 +125,9 @@
 
         triggerRefresh(this);
 
-        return this.loadStatus();
+        this.loadStatus();
+
+        return this;
 
     };
 
@@ -248,6 +250,7 @@
             return this.loadContent();
         }
 
+        return this;
 
     };
 
@@ -353,6 +356,8 @@
 
         }
 
+        return this;
+
     };
 
 
@@ -413,7 +418,9 @@
 
         triggerRefresh(this);
 
-        return this.loadContent();
+        this.loadContent();
+
+        return this;
 
     };
 
@@ -497,7 +504,9 @@
 
         };
 
-        return this.loadContent();
+        this.loadContent();
+
+        return this;
 
     };
 
@@ -606,7 +615,9 @@
         };
 
 
-        return this.loadContent();
+        this.loadContent();
+
+        return this;
 
     };
 
@@ -665,13 +676,13 @@
 
             triggerRefresh(this);
 
-            return this.loadContent();
+            this.loadContent();
 
         }
 
+        return this;
 
     };
-
 
 
 })(jQuery);
