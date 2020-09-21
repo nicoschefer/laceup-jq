@@ -302,7 +302,10 @@ $(document).ready( function () {
 
 
 
-    $('table.ranking').each(function(index, el) {
+
+
+    $('.laceup-ranking-widget').each(function(index, el) {
+
         $(el).DataTable({
             "ajax": {
                 url: globalAppURL+"/api/overall_rankings?tour.slug="+globalTourSlug+"&sex="+$(el).data('sex')+"&pagination=false",
@@ -318,8 +321,9 @@ $(document).ready( function () {
                 "emptyTable": "Noch keine Resultate"
             },
             "columns": [
-                { "data": "rank" },
+                { "title": "", "data": "rank" },
                 {
+                    "title": "",
                     "data": "athlete.profile",
                     "render": function(data, type, row) {
 
@@ -331,21 +335,25 @@ $(document).ready( function () {
                     }
                 },
                 {
+                    "title": "Name",
                     "data": "athlete.name",
                     "render": function(name, type, row) {
                         return '<a style="text-decoration: none;" href="https://strava.com/athletes/'+row.athlete.strava_id+'" target="_blank">'+name+'</a>';
                     }
                 },
                 {
+                    "title": "Etappen",
                     "data": "number_of_stages"
                 },
                 {
+                    "title": "Zeit",
                     "data": "ranking_time",
                     "render": function(data, type, row) {
                         return '<span class="ranking-time">'+data+'</span>';
                     }
                 },
                 {
+                    "title": "Rückstand",
                     "render": function(data, type, row) {
                         var lag = "";
                         if (row.rank > 1 && row.stage_lag == 0) {
