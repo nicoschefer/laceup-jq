@@ -2,6 +2,7 @@ $(document).ready( function () {
 
     globalAppURL = $('#laceup-meta').data('app-url');
     globalTourSlug = $('#laceup-meta').data('slug');
+    paidBadgeURL = 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg';
 
     setInterval(function updateLoginStatus() { //reload automatically
 
@@ -24,7 +25,7 @@ $(document).ready( function () {
                     //console.log(data);
                     console.log("updateLoginStatus: get me.json success");
 
-                    if(data.tour.slug == globalTourSlug){
+                    if(data.tour.slug === globalTourSlug){
 
 
                         $("div.join").hide(); //has already joined
@@ -60,7 +61,7 @@ $(document).ready( function () {
                                 $(this)
                                     .text($(this).data('text-support'))
                                     .attr('href',$(this).data('href-original').replace('/connect','/donate')); //set the support url
-                                ;
+
 
                             }
 
@@ -144,7 +145,7 @@ $(document).ready( function () {
                         $(htmlScaffold).removeClass('recent-item-paid');
                     }
 
-                    $(htmlScaffold).find('.recent-profile').html("<div class=\"profile-img\" style=\"width: 32px; height: 32px; border-radius: 50%; background-position: center; background-size: cover; background-image: url("+val.node.athlete.profile+");\"></div>"+(val.node.athlete.paid ? '<a title="Unterstützer" href="'+globalAppURL+'/tour/'+globalTourSlug+'/donate">'+paidSVGBadge+'</a>' : ''));
+                    $(htmlScaffold).find('.recent-profile').html("<div class=\"profile-img\" style=\"width: 32px; height: 32px; border-radius: 50%; background-position: center; background-size: cover; background-image: url("+val.node.athlete.profile+");\"></div>"+(val.node.athlete.paid ? '<img title="Unterstützer" href="'+globalAppURL+'/tour/'+globalTourSlug+'/donate"><img class="paid-badge" src="'+paidBadgeURL+'"></img></a>' : ''));
                     $(htmlScaffold).find('.recent-date').html(effortTimeAgo);
                     $(htmlScaffold).find('.recent-name').html(val.node.athlete.name);
                     $(htmlScaffold).find('.recent-stage').html(val.node.stage.name.replace("TdU: ", "").replace("Tdu: ", ""));
