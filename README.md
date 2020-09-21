@@ -1,2 +1,2 @@
 # laceup-jq
-LaceUp jQuer
+LaceUp jQuery
