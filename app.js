@@ -6,7 +6,11 @@ $(document).ready( function () {
 
     setInterval(function updateLoginStatus() { //reload automatically
 
+        console.log("setInterval(updateLoginStatus())");
+
         function updateLoginStatus() {
+
+            console.log("updateLoginStatus()");
 
             $.ajax({
                 url: globalAppURL+"/api/me.json",
@@ -91,6 +95,9 @@ $(document).ready( function () {
 
     //Load recent results
     setInterval(function updateRecentResults() { //reload automatically
+
+        console.log("setInterval(updateRecentResults())");
+
         $.ajax({url: globalAppURL+"/api/graphql",
             contentType: "application/json",type:'POST',
             data: JSON.stringify({ query:`{
@@ -127,6 +134,7 @@ $(document).ready( function () {
 			`}),
             success: function(result) {
 
+                console.log("updateRecentResults ajax response:");
                 console.log(result);
 
                 var htmlScaffold = $('#recent-activities .recent-item').first().clone();
@@ -172,6 +180,8 @@ $(document).ready( function () {
     //Load overall leaderboard results
     setInterval(function updateLeaderboard() { //reload automatically
 
+        console.log("setInterval(updateLeaderboard())");
+
         $('.leaderboard').each(function(index, el) { //data-sex="F", data-sex="M" | data-limit="10"
 
             $(el).html('');
@@ -203,6 +213,9 @@ $(document).ready( function () {
   }
 }`}),
                 success: function(rankingResponse) {
+
+                    console.log("updateLeaderboard() rankingResponse");
+
                     $.each(rankingResponse.data.overallRankings.edges, function( key, val ) {
                         var ranking = val.node;
                         var lag = "";
@@ -239,6 +252,8 @@ $(document).ready( function () {
     //Load stage results
     setInterval(function updateEtappen() { //reload automatically
 
+        console.log("setInterval(updateEtappen())");
+
         $('.podium').each(function(index, el) { //data-sex="F", data-sex="M", .podium-strava-segment-id (div element containing the strava segment id)
 
             var stravaSegmentId = $(el).closest('.podium-item').find('.podium-strava-segment-id').html(); //Webflow workaround: not possible to populate a data- attribute from a collection
@@ -246,6 +261,8 @@ $(document).ready( function () {
             $.getJSON(
                 globalAppURL+"/api/rankings?stage.segment="+stravaSegmentId+"&sex="+$(el).data('sex')+"&itemsPerPage=3",
                 function(rankingResponse) {
+
+                    console.log("updateEtappen() rankingResponse");
 
                     $.each(rankingResponse, function( key, val ) {
 
@@ -268,14 +285,16 @@ $(document).ready( function () {
     //Load list of supporter
     setInterval(function updateSupporter() { //reload automatically
 
+        console.log("setInterval(updateSupporter())");
+
         $.ajax({
             url: globalAppURL+"/api/athletes.json?tour.slug="+globalTourSlug+"&paid=true&pagination=false",
             type: 'GET',
             dataType: 'json',
             success: function(supporterResponse) {
 
+                console.log("updateSupporter() supporterResponse");
                 console.log(supporterResponse);
-                console.log("getSupporter: get athletes.json success");
 
                 $('#supporterList').html("");
 
