@@ -301,6 +301,65 @@ $(document).ready( function () {
 
 
 
+    $(document).ready( function () {
+        $('.laceup-stageranking:not([data-segment=""])').each(function(index, el) {
+            $(el).DataTable({
+                "ajax": {
+                    url: globalAppURL+"/api/rankings?stage.segment="+$(el).data('segment')+"&sex="+$(el).data('sex')+"&pagination=false",
+                    dataSrc: ""
+                },
+                "processing": true,
+                "conditionalPaging": true,
+                "lengthMenu": [[100, -1], [100, "Alle Resultate"]],
+                "ordering": false,
+                "searching": false,
+                "info": false,
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json",
+                    "emptyTable": "Noch keine Resultate"
+                },
+                "columns": [
+                    { "title": "Rang", "data": "rank" },
+                    {
+                        "title": "",
+                        "data": "athlete.profile",
+                        "render": function(data, type, row) {
+
+                            return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
+                                '<div class="profile-img" style="width: 32px; height: 32px; border-radius: 50%; background-position: center middle; background-size: cover; background-image: url('+data+');"></div>'+
+                                (row.athlete.paid ? '<a class="ranking-paid-badge" title="Unterstützer" href="'+globalAppURL+'/tour/'+globalTourSlug+'/donate">'+paidSVGBadge+'</a>' : '')+
+                                '</div';
+                        }
+                    },
+                    {
+                        "title": "Name",
+                        "data": "athlete.name",
+                        "render": function(name, type, row) {
+                            return '<a style="text-decoration: none;" href="https://strava.com/athletes/'+row.athlete.strava_id+'" target="_blank">'+name+'</a>';
+                        }
+                    },
+                    {
+                        "title": "Zeit",
+                        "data": "ranking_time",
+                        "render": function(data, type, row) {
+                            return '<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+row.effort.effort_strava_link+'">'+data+'</a>';
+                        }
+                    },
+                ],
+                columnDefs: [
+                    { targets: 0, width: '5%' },
+                    { targets: 1, width: '10%' },
+                    { targets: 2, width: '50%' },
+                    { targets: -1, className: 'dt-body-right', width: '35%' }
+                ]
+            }).on('page.dt', function() { //on pagination click, scroll to top of the table
+                $('html, body').animate({
+                    scrollTop: $(el).offset().top
+                }, 'fast');
+            });
+        });
+    });
+
     $('.laceup-ranking').each(function(index, el) {
 
         $(el).DataTable({

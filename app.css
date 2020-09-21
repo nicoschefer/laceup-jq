@@ -97,7 +97,18 @@
 
 
 
-/* Ranking Table ------------------------------------------------------------ */
+/* Etappen Raning Table ------------------------------------------------------------ */
+
+.dataTables_wrapper .dataTables_length { /* pagination page size selector */
+    float:right;
+}
+.dataTables_wrapper .dataTables_paginate { /* pagination page selector */
+    font-size: 14px;
+    margin: 0.9em;
+}
+
+
+/* Global Ranking Table ------------------------------------------------------------ */
 table.dataTable thead th,
 table.dataTable tfoot th {
     text-align: left;
@@ -129,7 +140,7 @@ table.dataTable .ranking-time.ranking-time-back{
     left: 22px;
 }
 
-/* Ranking Table ------------------------------------------------------------ */
+/* ------------------------------------------------------------ */
 
 
 
