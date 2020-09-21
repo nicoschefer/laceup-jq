@@ -207,7 +207,13 @@
                             $(htmlScaffold).removeClass('recent-item-paid');
                         }
 
-                        $(htmlScaffold).find('.recent-profile').html("<div class=\"profile-img\" style=\"width: 32px; height: 32px; border-radius: 50%; background-position: center; background-size: cover; background-image: url("+val.node.athlete.profile+");\"></div>"+(val.node.athlete.paid ? '<img title="Unterstützer" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></img></a>' : ''));
+                        $(htmlScaffold).find('.recent-profile').html(
+                            '<div class="profile-img" style="width: 32px; height: 32px; border-radius: 50%; background-position: center; background-size: cover; background-image: url('+val.node.athlete.profile+');">' +
+                                (val.node.athlete.paid ?
+                                    '<a title="Unterstützer" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></img></a>' :
+                                    '')+
+                            '</div>'
+                        );
                         $(htmlScaffold).find('.recent-date').html(effortTimeAgo);
                         $(htmlScaffold).find('.recent-name').html(val.node.athlete.name);
                         $(htmlScaffold).find('.recent-stage').html(val.node.stage.name);
@@ -459,7 +465,9 @@
 
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
                                     '<div class="profile-img" style="width: 32px; height: 32px; border-radius: 50%; background-position: center middle; background-size: cover; background-image: url('+data+');"></div>'+
-                                    (row.athlete.paid ? '<a class="ranking-paid-badge" title="Unterstützer" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></img></a>' : '')+
+                                        (row.athlete.paid ?
+                                            ('<a class="ranking-paid-badge" title="Unterstützer" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></img></a>') :
+                                            '')+
                                     '</div';
                             }
                         },
