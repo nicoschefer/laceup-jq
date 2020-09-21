@@ -24,22 +24,24 @@
     border: 1px solid #cd7f32;
 }
 
-.recent-item .recent-profile > .profile-img {
-    border:2px solid transparent;
-}
-.recent-item.recent-item-paid .recent-profile > .profile-img {
-    border:2px solid #ffc800;
-}
-
 .recent-profile {
     position: relative;
 }
-.recent-item.recent-item-paid .recent-profile img.paid-badge {
+.recent-profile > .profile-img {
+    border:2px solid transparent;
+}
+.recent-profile img.paid-badge {
     width: 18px;
     position: absolute;
     top: -10px;
     right: 4px;
 }
+
+.recent-item-paid .recent-profile > .profile-img {
+    border:2px solid #ffc800;
+}
+
+
 
 /*  ---------------------------------------------------- */
 .result-name:empty:after {

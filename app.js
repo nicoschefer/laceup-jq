@@ -4,89 +4,82 @@ $(document).ready( function () {
     globalTourSlug = $('#laceup-meta').data('slug');
     paidBadgeURL = 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg';
 
-    setInterval(function updateLoginStatus() { //reload automatically
+    setInterval(function updateUserStatus() { //reload automatically
 
-        console.log("setInterval(updateLoginStatus())");
+        console.log("setInterval(updateUserStatus())");
 
-        function updateLoginStatus() {
+        $.ajax({
+            url: globalAppURL+"/api/me.json",
+            type: 'GET',
+            dataType: 'json',
+            headers: {
+                // Important: JQuery omits xhr headers for cross-site requests by default.
+                // Thus the app uses URL's to redirect user after successful login.
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function(data) {
 
-            console.log("updateLoginStatus()");
+                //console.log(data);
+                console.log("updateUserStatus() response");
+                console.log(data);
 
-            $.ajax({
-                url: globalAppURL+"/api/me.json",
-                type: 'GET',
-                dataType: 'json',
-                headers: {
-                    // Important: JQuery omits xhr headers for cross-site requests by default.
-                    // Thus the app uses URL's to redirect user after successful login.
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                xhrFields: {
-                    withCredentials: true
-                },
-                success: function(data) {
+                if(data.tour.slug === globalTourSlug){
 
-                    //console.log(data);
-                    console.log("updateLoginStatus() response");
-                    console.log(data);
+                    $("div.join").hide(); //has already joined
 
-                    if(data.tour.slug === globalTourSlug){
+                    if(!data.paid){ //but not supported:
 
-                        $("div.join").hide(); //has already joined
+                        $(".supportname").each(function() {
 
-                        if(!data.paid){ //but not supported:
+                            $(this).text($(this).text().replace('<firstname>', data.firstname));
 
-                            $(".supportname").each(function() {
+                        });
 
-                                $(this).text($(this).text().replace('<firstname>', data.firstname));
+                        $("div.support").show();
+                    }
 
-                            });
 
-                            $("div.support").show();
+                    $(".signupbutton").each(function() {
+
+                        if(!$(this).data('href-original')){ //only do this the first time
+                            $(this).data('href-original',$(this).attr('href'));
                         }
 
 
-                        $(".signupbutton").each(function() {
+                        if(data.paid){
 
-                            if(!$(this).data('href-original')){ //only do this the first time
-                                $(this).data('href-original',$(this).attr('href'));
-                            }
+                            $(this)
+                                .text($(this).data('text-profile')) //set the profile text, eg. "Mein Profil"
+                                .attr('href',$(this).data('href-original')); //set the original URL (not the support url)
 
+                        }
+                        else{
 
-                            if(data.paid){
-
-                                $(this)
-                                    .text($(this).data('text-profile')) //set the profile text, eg. "Mein Profil"
-                                    .attr('href',$(this).data('href-original')); //set the original URL (not the support url)
-
-                            }
-                            else{
-
-                                $(this)
-                                    .text($(this).data('text-support'))
-                                    .attr('href',$(this).data('href-original').replace('/connect','/donate')); //set the support url
+                            $(this)
+                                .text($(this).data('text-support'))
+                                .attr('href',$(this).data('href-original').replace('/connect','/donate')); //set the support url
 
 
-                            }
+                        }
 
-                        });
-                    }
-                    else{
-
-                        console.log("me.json: Tour slug mismatch");
-
-                    }
-
-                },
-                error: function(data) {
-                    console.log(data);
+                    });
                 }
-            });
+                else{
 
+                    console.log("me.json: Tour slug mismatch");
 
-        }
+                }
 
-        return updateLoginStatus; //return the function to execute it on initial start
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+
+        return updateUserStatus; //return the function to execute it on initial start
 
     }(), 1000*120); //milliseconds
 
@@ -135,7 +128,7 @@ $(document).ready( function () {
                 console.log("updateRecentResults ajax response:");
                 console.log(result);
 
-                var htmlScaffold = $('#recent-activities .recent-item').first().clone();
+                var htmlScaffold = $('#recent-activities .recent-item').first().clone(); //allow webflow mobile css for styling
 
                 $('#recent-activities .recent-item').remove(); //start empty
 
@@ -210,11 +203,11 @@ $(document).ready( function () {
     }
   }
 }`}),
-                success: function(rankingResponse) {
+                success: function(response) {
 
-                    console.log("updateLeaderboard() rankingResponse");
+                    console.log("updateLeaderboard() response");
 
-                    $.each(rankingResponse.data.overallRankings.edges, function( key, val ) {
+                    $.each(response.data.overallRankings.edges, function( key, val ) {
                         var ranking = val.node;
                         var lag = "";
                         if (ranking.stage_lag > 0) {
@@ -234,7 +227,6 @@ $(document).ready( function () {
                             '<br><small class="paragraph-light paragraph-small" style="float:right;">'+lag+'</small>'+
                             '</div>'+
                             '</div>';
-
 
                         $(el).append(itemHTML);
                     });
@@ -258,14 +250,14 @@ $(document).ready( function () {
 
             $.getJSON(
                 globalAppURL+"/api/rankings?stage.segment="+stravaSegmentId+"&sex="+$(el).data('sex')+"&itemsPerPage=3",
-                function(rankingResponse) {
+                function(response) {
 
-                    console.log("updateStagePoduim() rankingResponse");
+                    console.log("updateStagePoduim() response");
 
-                    $.each(rankingResponse, function( key, val ) {
+                    $.each(response, function( key, val ) {
 
                         var lbItem = $(el).find('.result-rank-'+(key+1)); //don't use val.rank, as this could be a shared rank (rank 1, 1, 3)
-                        //var timeBack = (key>0 && val.ranking_time_seconds) ? "+"+new Date((val.ranking_time_seconds - rankingResponse.data[0].ranking_time_seconds) * 1000).toISOString().substr(11, 8) : '';
+                        //var timeBack = (key>0 && val.ranking_time_seconds) ? "+"+new Date((val.ranking_time_seconds - response.data[0].ranking_time_seconds) * 1000).toISOString().substr(11, 8) : '';
 
                         $(lbItem).find('.result-rank > div').html(val.rank);
                         $(lbItem).find('.result-time').html('<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+val.effort.effort_strava_link+'">'+val.ranking_time+'</a>');
