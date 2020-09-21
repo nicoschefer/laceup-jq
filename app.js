@@ -301,10 +301,7 @@ $(document).ready( function () {
 
 
 
-
-
-
-    $('.laceup-ranking-widget').each(function(index, el) {
+    $('.laceup-ranking').each(function(index, el) {
 
         $(el).DataTable({
             "ajax": {
