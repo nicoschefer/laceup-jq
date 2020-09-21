@@ -12,8 +12,6 @@
             signupBtnSelector: '.signupbutton'
         }, settings );
 
-        //console.log(settings);
-
         var handleJoin = function(data){
 
             if(data.id){
@@ -70,8 +68,6 @@
         };
 
         this.loadStatus = function() {
-
-            console.log('loadStatus()');
 
             $.ajax({
                 url: settings.appUrl + "/api/me.json",
@@ -148,8 +144,6 @@
             lastActivities: 20,
             paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
         }, settings );
-
-        console.log(settings);
 
         this.loadContent = function() {
 
@@ -627,8 +621,6 @@
         settings = $.extend({ //populate some defaults
             limit: 100
         }, settings );
-
-        console.log(settings);
 
         this.loadContent = function() {
 

@@ -1,5 +1,5 @@
 
-/*  ---------------------------------------------------- */
+/*  recent activities ---------------------------------------------------- */
 .recent-time a {
     text-decoration: none;
 }
@@ -42,8 +42,7 @@
 }
 
 
-
-/*  ---------------------------------------------------- */
+/*  Stage podium and leaderboard ---------------------------------------------------- */
 .result-name:empty:after {
     content: "Noch kein Resultat";
     opacity:0.2;
@@ -99,7 +98,7 @@
 
 
 
-/* Etappen Raning Table ------------------------------------------------------------ */
+/* Etappen ranking table ------------------------------------------------------------ */
 
 .dataTables_wrapper .dataTables_length { /* pagination page size selector */
     float:right;
@@ -110,7 +109,7 @@
 }
 
 
-/* Global Ranking Table ------------------------------------------------------------ */
+/* Overall ranking table ------------------------------------------------------------ */
 table.dataTable thead th,
 table.dataTable tfoot th {
     text-align: left;
@@ -145,12 +144,11 @@ table.dataTable .ranking-time.ranking-time-back{
 /* ------------------------------------------------------------ */
 
 
-
-/*  ---------------------------------------------------- */
+/*  News ---------------------------------------------------- */
 .ticker-item a {
     display: inline;
 }
 
-
+/*  Helper ---------------------------------------------------- */
 .truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /*  ---------------------------------------------------- */
