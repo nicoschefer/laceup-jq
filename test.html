@@ -1,0 +1,180 @@
+<html>
+
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <meta id="laceup-meta"
+          data-slug="cdz-2020-1"
+          data-app-url="https://app.laceup.io"
+          data-from-date="2020-01-01"
+          data-to-date="2020-12-31"
+    />
+
+</head>
+
+<body>
+
+
+    <a data-text-profile="Mein Profil" data-text-support="Tour unterstützen!" href="https://app.laceup.io/tour/cdz-2020-1/connect" class="button-3 signupbutton w-button">Hey!</a>
+
+    <hr>
+
+    <div class="join">Join</div>
+    <div class="support">Support</div>
+    <p><span class="supportname">$$firstname$$</span></p>
+
+    <hr>
+
+
+    <table class="laceup-ranking compact" data-sex="F" style="width: 100%;"></table>
+    <table class="laceup-ranking compact" data-sex="M" style="width: 100%;"></table>
+
+    <hr>
+
+    <table class="laceup-stageranking compact" data-segment="25607875" data-sex="F" style="width: 100%;"></table>
+    <table class="laceup-stageranking compact" data-segment="25607875" data-sex="M" style="width: 100%;"></table>
+
+
+    <hr>
+
+    <div class="leaderboard" data-sex="F"></div>
+
+    <hr>
+
+    <div id="supporter"></div>
+
+    <hr>
+
+    <div id="recent-activities" data-last-activities="20">
+        <div class="recent-wrapper">
+            <div class="recent-item">
+                <div class="recent-profile"></div>
+                <div class="recent-date"></div>
+                <div class="recent-name"></div>
+                <div class="recent-stage"></div>
+                <div class="recent-time"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <!---- start webflow custom code ---------------------------------------------------------------------->
+
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="app.css" />
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.3/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.3/locale/de-ch.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+    <script>
+
+        /**
+         * @summary     ConditionalPaging
+         * @description Hide paging controls when the amount of pages is <= 1
+         * @version     1.0.0
+         * @file        dataTables.conditionalPaging.js
+         * @author      Matthew Hasbach (https://github.com/mjhasbach)
+         * @contact     hasbach.git@gmail.com
+         * @copyright   Copyright 2015 Matthew Hasbach
+         *
+         * License      MIT - http://datatables.net/license/mit
+         *
+         * This feature plugin for DataTables hides paging controls when the amount
+         * of pages is <= 1. The controls can either appear / disappear or fade in / out
+         *
+         * @example
+         *    $('#myTable').DataTable({
+         *        conditionalPaging: true
+         *    });
+         *
+         * @example
+         *    $('#myTable').DataTable({
+         *        conditionalPaging: {
+         *            style: 'fade',
+         *            speed: 500 // optional
+         *        }
+         *    });
+         */
+
+        (function(window, document, $) {
+            $(document).on('init.dt', function(e, dtSettings) {
+                if ( e.namespace !== 'dt' ) {
+                    return;
+                }
+
+                var options = dtSettings.oInit.conditionalPaging || $.fn.dataTable.defaults.conditionalPaging;
+
+                if ($.isPlainObject(options) || options === true) {
+                    var config = $.isPlainObject(options) ? options : {},
+                        api = new $.fn.dataTable.Api(dtSettings),
+                        speed = 'slow',
+                        conditionalPaging = function(e) {
+                            var $paging = $(api.table().container()).find('div.dataTables_paginate, div.dataTables_length'),
+                                pages = api.page.info().pages;
+
+                            if (e instanceof $.Event) {
+                                if (pages <= 1) {
+                                    if (config.style === 'fade') {
+                                        $paging.stop().fadeTo(speed, 0);
+                                    }
+                                    else {
+                                        $paging.css('visibility', 'hidden');
+                                    }
+                                }
+                                else {
+                                    if (config.style === 'fade') {
+                                        $paging.stop().fadeTo(speed, 1);
+                                    }
+                                    else {
+                                        $paging.css('visibility', '');
+                                    }
+                                }
+                            }
+                            else if (pages <= 1) {
+                                if (config.style === 'fade') {
+                                    $paging.css('opacity', 0);
+                                }
+                                else {
+                                    $paging.css('visibility', 'hidden');
+                                }
+                            }
+                        };
+
+                    if ( config.speed !== undefined ) {
+                        speed = config.speed;
+                    }
+
+                    conditionalPaging();
+
+                    api.on('draw.dt', conditionalPaging);
+                }
+            });
+        })(window, document, jQuery);
+
+    </script>
+
+
+    <script>
+        $('[data-fancybox]').fancybox({
+            smallBtn: true,
+            iframe: {
+                preload: true
+            },
+            afterClose: function() {
+                updateLoginStatus();
+            }
+        })
+    </script>
+
+
+</body>
+
+</html>
