@@ -27,12 +27,10 @@ $(document).ready( function () {
                 success: function(data) {
 
                     //console.log(data);
-                    console.log("updateLoginStatus: get me.json success");
+                    console.log("updateLoginStatus() response");
+                    console.log(data);
 
                     if(data.tour.slug === globalTourSlug){
-
-                        console.log("Slug matched: "+globalTourSlug);
-                        console.log(data);
 
                         $("div.join").hide(); //has already joined
 
@@ -249,10 +247,10 @@ $(document).ready( function () {
     }(), 1000*120); //milliseconds
 
 
-    //Load stage results
-    setInterval(function updateEtappen() { //reload automatically
+    //Load stage results - first 3 results per stage
+    setInterval(function updateStagePoduim() { //reload automatically
 
-        console.log("setInterval(updateEtappen())");
+        console.log("setInterval(updateStagePoduim())");
 
         $('.podium').each(function(index, el) { //data-sex="F", data-sex="M", .podium-strava-segment-id (div element containing the strava segment id)
 
@@ -262,7 +260,7 @@ $(document).ready( function () {
                 globalAppURL+"/api/rankings?stage.segment="+stravaSegmentId+"&sex="+$(el).data('sex')+"&itemsPerPage=3",
                 function(rankingResponse) {
 
-                    console.log("updateEtappen() rankingResponse");
+                    console.log("updateStagePoduim() rankingResponse");
 
                     $.each(rankingResponse, function( key, val ) {
 
@@ -278,11 +276,13 @@ $(document).ready( function () {
 
         });
 
-        return updateEtappen; //return the function to execute it on initial start
+        return updateStagePoduim; //return the function to execute it on initial start
 
     }(), 1000*130); //milliseconds
 
+
     //Load list of supporter
+    /*
     setInterval(function updateSupporter() { //reload automatically
 
         console.log("setInterval(updateSupporter())");
@@ -313,12 +313,7 @@ $(document).ready( function () {
         return updateSupporter; //return the function to execute it on initial start
 
     }(), 1000*130); //milliseconds
-
-
-    //jump to newsticker after pagination click (instead of top)
-    $('#newsticker .w-pagination-wrapper a').each(function() {
-        $(this).attr('href',	$(this).attr('href')+'#newsticker');
-    });
+     */
 
 
 
@@ -463,5 +458,13 @@ $(document).ready( function () {
             }
         });
     });
+
+
+    //jump to newsticker after pagination click (instead of top)
+    $('#newsticker .w-pagination-wrapper a').each(function() {
+        $(this).attr('href',	$(this).attr('href')+'#newsticker');
+    });
+
+
 
 });
