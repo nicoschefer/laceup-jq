@@ -326,7 +326,7 @@ $(document).ready( function () {
 
                         return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
                             '<div class="profile-img" style="width: 32px; height: 32px; border-radius: 50%; background-position: center; background-size: cover; background-image: url('+data+');"></div>'+
-                            (row.athlete.paid ? '<a class="ranking-paid-badge" title="Unterstützer" href="'+globalAppURL+'/tour/'+globalTourSlug+'/donate"><img class="paid-badge" src="'+paidBadgeURL+'"></img></a>' : '')+
+                            (row.athlete.paid ? '<a title="Unterstützer" href="'+globalAppURL+'/tour/'+globalTourSlug+'/donate"><img class="paid-badge" src="'+paidBadgeURL+'"></img></a>' : '')+
                             '</div';
 
                     }
