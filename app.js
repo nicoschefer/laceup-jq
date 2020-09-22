@@ -2,15 +2,13 @@
 
     $.fn.laceUpUserStatus = function(options) {
 
-        var settings = $.extend(this.data(), options ); //extend from the meta data properties
-
-        settings = $.extend({
+        var settings = $.extend({
             refreshSeconds: 240,
             supportSelector: 'div.support',
             joinSelector: 'div.join',
             supportNameSelector: '.supportname',
             signupBtnSelector: '.signupbutton'
-        }, settings );
+        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
         var handleJoin = function(data){
 
@@ -135,17 +133,12 @@
 
     $.fn.laceUpRecentActivities = function(options) {
 
-        var settings = $.extend(this.data(), options ); //extend from the meta data properties
-
-        settings = $.extend({ mainSelector: '#recent-activities'}, settings ); //set main the selector
-
-        settings = $.extend($(settings.mainSelector).data(), settings); //check the main selectors' data attribute for further settings
-
-        settings = $.extend({ //populate some defaults
+        var settings = $.extend({
+            mainSelector: '#recent-activities',
             refreshSeconds: 120,
             lastActivities: 20,
             paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
-        }, settings );
+        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
         this.loadContent = function() {
 
@@ -259,31 +252,28 @@
 
     $.fn.laceUpLeaderboard = function(options) {
 
-        var settings = $.extend(this.data(), options ); //extend from the meta data properties
-
-        settings = $.extend({ mainSelector: '.leaderboard'}, settings ); //set main the selector
-
-        settings = $.extend($(settings.mainSelector).data(), settings); //check the main selectors' data attribute for further settings
-
-        settings = $.extend({ //populate some defaults
+        var settings = $.extend({
+            mainSelector: '.leaderboard',
             refreshSeconds: 240,
-            limit: 10,
-        }, settings );
+            limit: 10
+        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
         this.loadContent = function() {
 
             $(settings.mainSelector).each(function(index, el) { //data-sex="F", data-sex="M" | data-limit="10"
 
+                var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
+
                 $(el).html('');
 
                 $.ajax({
-                    url: settings.appUrl + "/api/graphql",
+                    url: eleSettings.appUrl + "/api/graphql",
                     contentType: "application/json",
                     type: 'POST',
                     data: JSON.stringify({
                         query:
                             `{
-                              overallRankings(tour_slug: "`+settings.slug+`", sex: "`+$(el).data('sex')+`", first: `+settings.limit+`) {
+                              overallRankings(tour_slug: "`+eleSettings.slug+`", sex: "`+$(el).data('sex')+`", first: `+eleSettings.limit+`) {
                                 edges {
                                   node {
                                     id
@@ -364,25 +354,21 @@
 
     $.fn.laceUpStagePodium = function(options) {
 
-        var settings = $.extend(this.data(), options ); //extend from the meta data properties
-
-        settings = $.extend({ mainSelector: '.podium'}, settings ); //set main the selector
-
-        settings = $.extend($(settings.mainSelector).data(), settings); //check the main selectors' data attribute for further settings
-
-        settings = $.extend({ //populate some defaults
+        var settings = $.extend({
             refreshSeconds: 240,
-            limit: 3,
-        }, settings );
+            limit: 3
+        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
         this.loadContent = function() {
 
             $(settings.mainSelector).each(function(index, el) { //data-sex="F", data-sex="M", .podium-strava-segment-id (div element containing the strava segment id), data-limit="3"
 
+                var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
+
                 var stravaSegmentId = $(el).closest('.podium-item').find('.podium-strava-segment-id').html(); //Webflow workaround: not possible to populate a data- attribute from a collection
 
                 $.getJSON(
-                    settings.appUrl + "/api/rankings?stage.segment="+stravaSegmentId+"&sex="+$(el).data('sex')+"&itemsPerPage="+settings.limit,
+                    eleSettings.appUrl + "/api/rankings?stage.segment="+stravaSegmentId+"&sex="+$(el).data('sex')+"&itemsPerPage="+eleSettings.limit,
                     function(response) {
 
                         $.each(response, function( key, val ) {
@@ -428,23 +414,22 @@
 
     $.fn.laceUpStageRanking = function(options) {
 
-        var settings = $.extend(this.data(), options ); //extend from the meta data properties
-
-        settings = $.extend({ mainSelector: '.laceup-stageranking'}, settings ); //set main the selector
-
-        settings = $.extend($(settings.mainSelector).data(), settings); //check the main selectors' data attribute for further settings
-
-        settings = $.extend({ //populate some defaults
+        var settings = $.extend({
+            mainSelector: '.laceup-stageranking',
             limit: 3,
             paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
-        }, settings );
+        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
+
 
         this.loadContent = function() {
 
             $(settings.mainSelector+':not([data-segment=""])').each(function(index, el) {
+
+                var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
+
                 $(el).DataTable({
                     "ajax": {
-                        url: settings.appUrl+"/api/rankings?stage.segment="+$(el).data('segment')+"&sex="+$(el).data('sex')+"&pagination=false",
+                        url: eleSettings.appUrl+"/api/rankings?stage.segment="+$(el).data('segment')+"&sex="+$(el).data('sex')+"&pagination=false",
                         dataSrc: ""
                     },
                     "processing": true,
@@ -467,7 +452,7 @@
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
                                     '<div class="profile-img" style="width: 32px; height: 32px; border-radius: 50%; background-position: center middle; background-size: cover; background-image: url('+data+');"></div>'+
                                         (row.athlete.paid ?
-                                            ('<a class="ranking-paid-badge" title="Unterstützer" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></img></a>') :
+                                            ('<a class="ranking-paid-badge" title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></img></a>') :
                                             '')+
                                     '</div';
                             }
@@ -513,25 +498,20 @@
 
     $.fn.laceUpOverallRanking = function(options) {
 
-        var settings = $.extend(this.data(), options ); //extend from the meta data properties
-
-        settings = $.extend({ mainSelector: '.laceup-ranking'}, settings ); //set main the selector
-
-        settings = $.extend($(settings.mainSelector).data(), settings); //check the main selectors' data attribute for further settings
-
-        settings = $.extend({ //populate some defaults
-            limit: 3,
-            paginate: false,
+        var settings = $.extend({
+            mainSelector: '.laceup-ranking',
             paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
-        }, settings );
+        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
         this.loadContent = function() {
 
             $(settings.mainSelector).each(function(index, el) {
 
+                var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
+
                 $(el).DataTable({
                     "ajax": {
-                        url: settings.appUrl+"/api/overall_rankings?tour.slug="+settings.slug+"&sex="+$(el).data('sex')+"&pagination="+settings.paginate,
+                        url: eleSettings.appUrl+"/api/overall_rankings?tour.slug="+eleSettings.slug+"&sex="+$(el).data('sex')+"&pagination=false",
                         dataSrc: ""
                     },
                     "processing": true,
@@ -552,7 +532,7 @@
 
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
                                     '<div class="profile-img" style="width: 32px; height: 32px; border-radius: 50%; background-position: center; background-size: cover; background-image: url('+data+');"></div>'+
-                                    (row.athlete.paid ? '<a title="Unterstützer" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></img></a>' : '')+
+                                    (row.athlete.paid ? '<a title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></img></a>' : '')+
                                     '</div';
 
                             }
@@ -594,7 +574,7 @@
                         { responsivePriority: 4, targets: 4, className: 'dt-body-right', width: '10%' }, // time
                         { responsivePriority: 5, targets: 5, className: 'dt-body-right', width: '10%' } // time back
                     ],
-                    "drawCallback": function ( settings ) {
+                    "drawCallback": function () {
                         var api = this.api();
                         var rows = api.rows( {page: 'current'} ).nodes();
                         var last = null;
@@ -623,15 +603,11 @@
 
     $.fn.laceUpSupporter = function(options) {
 
-        var settings = $.extend(this.data(), options ); //extend from the meta data properties
-
-        settings = $.extend({ mainSelector: '#supporter'}, settings ); //set main the selector
-
-        settings = $.extend($(settings.mainSelector).data(), settings); //check the main selectors' data attribute for further settings
-
-        settings = $.extend({ //populate some defaults
+        var settings = $.extend({
+            mainSelector: '#supporter',
+            refreshSeconds: 480,
             limit: 100
-        }, settings );
+        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
         this.loadContent = function() {
 
