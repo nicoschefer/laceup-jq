@@ -451,11 +451,12 @@
                             "render": function(data, type, row) {
 
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
-                                    '<div class="profile-img" style="background-image: url('+data+');"></div>'+
-                                        (row.athlete.paid ?
-                                            ('<a class="ranking-paid-badge" title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>') :
-                                            '')+
-                                    '</div';
+                                            '<div class="profile-img" style="background-image: url('+data+');">'+
+                                                (row.athlete.paid ?
+                                                    ('<a class="ranking-paid-badge" title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>') :
+                                                    '')+
+                                            '</div>'+
+                                        '</div>';
                             }
                         },
                         {
@@ -532,9 +533,10 @@
                             "render": function(data, type, row) {
 
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
-                                    '<div class="profile-img" style="background-image: url('+data+');">'+
-                                    (row.athlete.paid ? '<a title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>' : '')+
-                                    '</div';
+                                            '<div class="profile-img" style="background-image: url('+data+');">'+
+                                                (row.athlete.paid ? '<a title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>' : '')+
+                                            '</div>'+
+                                        '</div>';
 
                             }
                         },
