@@ -675,10 +675,11 @@ $(document).ready( function () {
         .laceUpOverallRanking()
         .laceUpSupporter();
 
-
     //jump to newsticker after pagination click (instead of top)
     $('#newsticker .w-pagination-wrapper a').each(function() {
         $(this).attr('href',	$(this).attr('href')+'#newsticker');
     });
+
+
 
 });
