@@ -76,7 +76,7 @@
     color: white;
     background-color: #cd7f32;
 }
-.podium .result-rank > div { /*stage, not overall ranking badge*/
+.podium-item .result-rank > div { /*stage, not overall ranking badge*/
     opacity: 0.75;
 }
 

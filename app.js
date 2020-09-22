@@ -134,7 +134,7 @@
     $.fn.laceUpRecentActivities = function(options) {
 
         var settings = $.extend({
-            mainSelector: '#recent-activities',
+            mainSelector: '#laceup-recentactivities',
             refreshSeconds: 120,
             lastActivities: 20,
             paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
@@ -253,7 +253,7 @@
     $.fn.laceUpLeaderboard = function(options) {
 
         var settings = $.extend({
-            mainSelector: '.leaderboard',
+            mainSelector: '.laceup-leaderboard',
             refreshSeconds: 240,
             limit: 10
         }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
@@ -355,7 +355,7 @@
     $.fn.laceUpStagePodium = function(options) {
 
         var settings = $.extend({
-            mainSelector: '.podium',
+            mainSelector: '.laceup-podium',
             refreshSeconds: 240,
             limit: 3
         }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
@@ -605,7 +605,7 @@
     $.fn.laceUpSupporter = function(options) {
 
         var settings = $.extend({
-            mainSelector: '#supporter',
+            mainSelector: '#laceup-supporter',
             refreshSeconds: 480,
             limit: 100
         }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
@@ -667,20 +667,9 @@
 
 $(document).ready( function () {
 
-    $('#laceup-meta')
-        .laceUpUserStatus()
-        .laceUpRecentActivities()
-        .laceUpLeaderboard()
-        .laceUpStagePodium()
-        .laceUpStageRanking()
-        .laceUpOverallRanking()
-        .laceUpSupporter();
-
     //jump to newsticker after pagination click (instead of top)
     $('#newsticker .w-pagination-wrapper a').each(function() {
         $(this).attr('href',	$(this).attr('href')+'#newsticker');
     });
-
-
 
 });
