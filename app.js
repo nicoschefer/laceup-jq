@@ -355,6 +355,7 @@
     $.fn.laceUpStagePodium = function(options) {
 
         var settings = $.extend({
+            mainSelector: '.podium',
             refreshSeconds: 240,
             limit: 3
         }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
