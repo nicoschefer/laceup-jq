@@ -26,6 +26,7 @@
 
 .recent-profile {
     position: relative;
+    margin-right: 4px;
 }
 .recent-profile > .profile-img {
     border:2px solid transparent;
@@ -34,7 +35,7 @@
     width: 18px;
     position: absolute;
     top: -10px;
-    right: 4px;
+    right: 0px;
 }
 
 .recent-item-paid .recent-profile > .profile-img {
@@ -124,6 +125,15 @@ table.dataTable .ranking-time.ranking-time-back{
     opacity:0.6;
 }
 
+.profile-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+
 .ranking-profile > .profile-img {
     border:2px solid transparent;
 }
@@ -131,14 +141,12 @@ table.dataTable .ranking-time.ranking-time-back{
     border:2px solid #ffc800;
 }
 
-.ranking-profile {
-    position: relative;
-}
-.ranking-profile img.paid-badge {
+.ranking-profile img.paid-badge,
+.recent-profile img.paid-badge {
     width: 18px;
     position: absolute;
     top: -11px;
-    left: 22px;
+    right: -10px;
 }
 
 /* ------------------------------------------------------------ */

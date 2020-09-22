@@ -176,7 +176,7 @@
                       }
                     }
                   }
-			`}),
+      `}),
                 success: function(result) {
 
                     var htmlScaffold = $(settings.mainSelector+' .recent-item').first().clone(); //allow webflow mobile css for styling
@@ -197,9 +197,9 @@
                         }
 
                         $(htmlScaffold).find('.recent-profile').html(
-                            '<div class="profile-img" style="width: 32px; height: 32px; border-radius: 50%; background-position: center; background-size: cover; background-image: url('+val.node.athlete.profile+');">' +
+                            '<div class="foobar profile-img" style="background-image: url('+val.node.athlete.profile+');">' +
                                 (val.node.athlete.paid ?
-                                    '<a title="Unterstützer" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></img></a>' :
+                                    '<a title="Unterstützer" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></a>' :
                                     '')+
                             '</div>'
                         );
@@ -451,9 +451,9 @@
                             "render": function(data, type, row) {
 
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
-                                    '<div class="profile-img" style="width: 32px; height: 32px; border-radius: 50%; background-position: center middle; background-size: cover; background-image: url('+data+');"></div>'+
+                                    '<div class="foo profile-img" style="background-image: url('+data+');"></div>'+
                                         (row.athlete.paid ?
-                                            ('<a class="ranking-paid-badge" title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></img></a>') :
+                                            ('<a class="ranking-paid-badge" title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>') :
                                             '')+
                                     '</div';
                             }
@@ -532,8 +532,8 @@
                             "render": function(data, type, row) {
 
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
-                                    '<div class="profile-img" style="width: 32px; height: 32px; border-radius: 50%; background-position: center; background-size: cover; background-image: url('+data+');"></div>'+
-                                    (row.athlete.paid ? '<a title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></img></a>' : '')+
+                                    '<div class="bar profile-img" style="background-image: url('+data+');">'+
+                                    (row.athlete.paid ? '<a title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>' : '')+
                                     '</div';
 
                             }
