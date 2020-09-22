@@ -151,4 +151,5 @@ table.dataTable .ranking-time.ranking-time-back{
 
 /*  Helper ---------------------------------------------------- */
 .truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rich-text-block a { display: inline; } /* prevent links in rich textblocks from breaking */
 /*  ---------------------------------------------------- */
