@@ -197,7 +197,7 @@
                         }
 
                         $(htmlScaffold).find('.recent-profile').html(
-                            '<div class="foobar profile-img" style="background-image: url('+val.node.athlete.profile+');">' +
+                            '<div class="profile-img" style="background-image: url('+val.node.athlete.profile+');">' +
                                 (val.node.athlete.paid ?
                                     '<a title="Unterstützer" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></a>' :
                                     '')+
@@ -451,7 +451,7 @@
                             "render": function(data, type, row) {
 
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
-                                    '<div class="foo profile-img" style="background-image: url('+data+');"></div>'+
+                                    '<div class="profile-img" style="background-image: url('+data+');"></div>'+
                                         (row.athlete.paid ?
                                             ('<a class="ranking-paid-badge" title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>') :
                                             '')+
@@ -532,7 +532,7 @@
                             "render": function(data, type, row) {
 
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
-                                    '<div class="bar profile-img" style="background-image: url('+data+');">'+
+                                    '<div class="profile-img" style="background-image: url('+data+');">'+
                                     (row.athlete.paid ? '<a title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>' : '')+
                                     '</div';
 
