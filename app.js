@@ -94,6 +94,10 @@
 
                     }
 
+                    if (typeof ga === 'function') {
+                        ga('set', 'userId', data.id); // Set the user ID using signed-in user_id.
+                    }
+
                 },
                 error: function(data) {
 
