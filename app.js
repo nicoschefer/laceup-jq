@@ -305,7 +305,7 @@
 
                             var itemHTML = '<div class="result-item result-rank-'+(key+1)+'">'+ //don't use val.rank, as this could be a shared rank (rank 1, 1, 3)
                                 '<div class="result-rank"><div>'+ranking.rank+'</div></div>'+
-                                '<div class="result-name">'+
+                                '<div class="result-name truncate">'+
                                 ranking.athlete.name+
                                 '<br><small class="paragraph-light paragraph-small">'+ranking.number_of_stages+' Etappe(n)</small>'+
                                 '</div>'+
@@ -378,8 +378,9 @@
                             //var timeBack = (key>0 && val.ranking_time_seconds) ? "+"+new Date((val.ranking_time_seconds - response.data[0].ranking_time_seconds) * 1000).toISOString().substr(11, 8) : '';
 
                             $(lbItem).find('.result-rank > div').html(val.rank);
-                            $(lbItem).find('.result-time').html('<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+val.effort.effort_strava_link+'">'+val.ranking_time+'</a>');
                             $(lbItem).find('.result-name').html(val.athlete.name);
+                            $(lbItem).find('.result-time').html('<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+val.effort.effort_strava_link+'">'+val.ranking_time+'</a>');
+
 
                         });
                     });
