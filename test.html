@@ -15,10 +15,22 @@
 
 <body>
 
-
     <a data-text-profile="Mein Profil" data-text-support="Tour unterstützen!" href="https://app.laceup.io/tour/cdz-2020-1/connect" class="button-3 signupbutton w-button">Hey!</a>
 
     <hr>
+
+    <div class="laceup-show-if-free-user">FREE</div>
+    <div class="laceup-show-if-paid-user">PAID</div>
+    <div class="laceup-show-if-unknown-user">UNKNOW</div>
+    <div class="laceup-show-if-paid-user laceup-show-if-free-user laceup-profile-placeholder">Paid or free, $$firstname$$ $$lastname$$</div>
+    <div class="laceup-show-if-unknown-user laceup-show-if-free-user laceup-profile-placeholder">Unknown or free, $$firstname$$</div>
+
+
+    <hr>
+
+    <div data-show-if="supported">Join</div>
+    <div data-show-if="unsupported">Join</div>
+
 
     <div class="join">Join</div>
     <div class="support">Support</div>

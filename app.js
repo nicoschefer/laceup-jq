@@ -4,9 +4,6 @@
 
         var settings = $.extend({
             refreshSeconds: 240,
-            supportSelector: 'div.support',
-            joinSelector: 'div.join',
-            supportNameSelector: '.supportname',
             signupBtnSelector: '.signupbutton'
         }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
@@ -14,11 +11,11 @@
 
             if(data.id){
 
-                $(settings.joinSelector).hide(); //has already joined
+                $('div.joint').hide(); //has already joined
 
                 if(!data.paid) { //but not supported:
 
-                    $(settings.supportSelector).show();
+                    $('div.support').show();
 
                 }
             }
@@ -29,7 +26,7 @@
 
             if(data.id){
 
-                $(settings.supportNameSelector).each(function() {
+                $('.supportname').each(function() {
 
                     $(this).text($(this).text().replace('$$firstname$$', data.firstname));
 
@@ -80,6 +77,42 @@
                     withCredentials: true
                 },
                 success: function(data) {
+
+                    if(data.tour.slug === settings.slug && data.id && data.paid) {
+
+                        $('.laceup-show-if-free-user').hide();
+                        $('.laceup-show-if-unknown-user').hide();
+                        $('.laceup-show-if-paid-user').show();
+
+                    }
+                    else if(data.tour.slug === settings.slug && data.id && !data.paid){
+
+                        $('.laceup-show-if-paid-user').hide();
+                        $('.laceup-show-if-unknown-user').hide();
+                        $('.laceup-show-if-free-user').show();
+                    }
+                    else{
+
+                        $('.laceup-show-if-paid-user').hide();
+                        $('.laceup-show-if-free-user').hide();
+                        $('.laceup-show-if-unknown-user').show();
+
+                    }
+
+                    if(data.tour.slug === settings.slug && data.id && data.firstname) {
+
+                        $('.laceup-profile-placeholder').each(function() {
+
+                            $(this).text(
+                                $(this).text()
+                                    .replace('$$firstname$$', data.firstname)
+                                    .replace('$$lastname$$', data.lastname)
+                            );
+
+                        });
+
+                    }
+
 
                     if(data.tour.slug === settings.slug){
 
