@@ -11,7 +11,7 @@
 
             if(data.id){
 
-                $('div.joint').hide(); //has already joined
+                $('div.join').hide(); //has already joined
 
                 if(!data.paid) { //but not supported:
 
