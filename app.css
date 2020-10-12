@@ -155,13 +155,16 @@ table.dataTable .ranking-time.ranking-time-back{
 #laceup-supporter a {
     text-decoration: none;
 }
-
+#laceup-supporter a:not(:empty):not(:last-child):after {
+    content: ", ";
+}
 /* ------------------------------------------------------------ */
 
 /*  News ---------------------------------------------------- */
 .ticker-item a {
     display: inline;
 }
+
 
 /*  Helper ---------------------------------------------------- */
 .truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
