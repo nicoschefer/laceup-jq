@@ -113,7 +113,6 @@
 
                     }
 
-
                     if(data.tour.slug === settings.slug){
 
                         handleJoin(data);
@@ -668,6 +667,10 @@
                     $(settings.mainSelector).html("");
 
                     $.each(supporterResponse, function( key, val ) {
+
+                        if(val.strava_id === 3129449) return; //Nico
+                        if(val.strava_id === 9959175) return; //Sebastian
+                        if(val.strava_id === 16814702) return; //Tobias
 
                         $(settings.mainSelector).append("<a href='https://www.strava.com/athletes/"+val.strava_id+"' class='link-inline' target='_blank'>"+val.firstname+" "+val.lastname+"</a> ");
 
