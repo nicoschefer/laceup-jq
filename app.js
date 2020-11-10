@@ -82,6 +82,7 @@
 
                         $('.laceup-show-if-free-user').hide();
                         $('.laceup-show-if-unknown-user').hide();
+                        $('.laceup-show-if-known-user').show();
                         $('.laceup-show-if-paid-user').show();
 
                     }
@@ -89,12 +90,14 @@
 
                         $('.laceup-show-if-paid-user').hide();
                         $('.laceup-show-if-unknown-user').hide();
+                        $('.laceup-show-if-known-user').show();
                         $('.laceup-show-if-free-user').show();
                     }
                     else{
 
                         $('.laceup-show-if-paid-user').hide();
                         $('.laceup-show-if-free-user').hide();
+                        $('.laceup-show-if-known-user').hide();
                         $('.laceup-show-if-unknown-user').show();
 
                     }
