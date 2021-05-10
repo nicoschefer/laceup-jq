@@ -186,6 +186,8 @@
 
         this.loadContent = function() {
 
+            console.log('Loading recent, last '+settings.lastActivities);
+
             $.ajax({url: settings.appUrl + "/api/graphql",
                 contentType: "application/json",
                 type:'POST',
