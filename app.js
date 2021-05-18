@@ -428,7 +428,7 @@
                             $(lbItem).find('.result-name').html(val.athlete.name);
                             $(lbItem).find('.result-time').html('<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+val.effort.effort_strava_link+'">'+val.ranking_time+'</a>');
 
-                            lbItem.removeClass('.result-rank-'+rankItem).addClass('.result-rank-'+val.rank); //used to display the gold/silver/bronze badge
+                            $(lbItem).removeClass('.result-rank-'+rankItem).addClass('.result-rank-'+val.rank); //used to display the gold/silver/bronze badge
 
                         });
                     });
