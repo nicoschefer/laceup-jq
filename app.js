@@ -349,7 +349,7 @@
                                 lag = "+" + ranking.time_to_first_formatted;
                             }
 
-                            var itemHTML = '<div class="result-item result-rank-'+ranking.rank+'">'+ //use +(key+1)+ to separate ranks with same time, use +ranking.rank+ to display shared ranks (rank 1, 1, 3)
+                            var itemHTML = '<div class="result-item result-rank-'+ranking.rank+'">'+
                                 '<div class="result-rank"><div>'+ranking.rank+'</div></div>'+
                                 '<div class="result-name truncate">'+
                                 ranking.athlete.name+
@@ -420,12 +420,15 @@
 
                         $.each(response, function( key, val ) {
 
-                            var lbItem = $(el).find('.result-rank-'+val.rank); //use +(key+1)+ to separate ranks with same time, use +val.rank+ to display shared ranks (rank 1, 1, 3)
+                            var rankItem = (key+1); // unique: 1,2,3
+
+                            var lbItem = $(el).find('.result-rank-'+rankItem); //don't use val.rank, as this could be a shared rank (rank 1, 1, 3). and we need to find the item
 
                             $(lbItem).find('.result-rank > div').html(val.rank);
                             $(lbItem).find('.result-name').html(val.athlete.name);
                             $(lbItem).find('.result-time').html('<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+val.effort.effort_strava_link+'">'+val.ranking_time+'</a>');
 
+                            lbItem.removeClass('.result-rank-'+rankItem).addClass('.result-rank-'+val.rank); //used to display the gold/silver/bronze badge
 
                         });
                     });
