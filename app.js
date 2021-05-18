@@ -723,8 +723,11 @@
 $(document).ready( function () {
 
     //jump to newsticker after pagination click (instead of top)
+    //Removed as pagination not needed anymore
+    /*
     $('#newsticker .w-pagination-wrapper a').each(function() {
-        $(this).attr('href',	$(this).attr('href')+'#newsticker');
+        $(this).attr('href', $(this).attr('href')+'#newsticker');
     });
+     */
 
 });
