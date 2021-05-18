@@ -420,8 +420,7 @@
 
                         $.each(response, function( key, val ) {
 
-                            var lbItem = $(el).find('.result-rank-'+(key+1)); //don't use val.rank, as this could be a shared rank (rank 1, 1, 3)
-                            //var timeBack = (key>0 && val.ranking_time_seconds) ? "+"+new Date((val.ranking_time_seconds - response.data[0].ranking_time_seconds) * 1000).toISOString().substr(11, 8) : '';
+                            var lbItem = $(el).find('.result-rank-'+val.rank); //use +(key+1)+ to separate ranks with same time, use +val.rank+ to display shared ranks (rank 1, 1, 3)
 
                             $(lbItem).find('.result-rank > div').html(val.rank);
                             $(lbItem).find('.result-name').html(val.athlete.name);
