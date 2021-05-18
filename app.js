@@ -349,7 +349,7 @@
                                 lag = "+" + ranking.time_to_first_formatted;
                             }
 
-                            var itemHTML = '<div class="result-item result-rank-'+val.rank+'">'+ //use +(key+1)+ to separate ranks with same time, use +val.rank+ to display shared ranks (rank 1, 1, 3)
+                            var itemHTML = '<div class="result-item result-rank-'+ranking.rank+'">'+ //use +(key+1)+ to separate ranks with same time, use +ranking.rank+ to display shared ranks (rank 1, 1, 3)
                                 '<div class="result-rank"><div>'+ranking.rank+'</div></div>'+
                                 '<div class="result-name truncate">'+
                                 ranking.athlete.name+
