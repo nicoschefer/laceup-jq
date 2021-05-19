@@ -1,10 +1,32 @@
 (function($) {
 
+    $.fn.laceUpInit = function(options) {
+
+        var settings = $.extend(this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
+
+        $('a.laceup-connect-link').each(function() {
+            $(this).attr('href', settings.appUrl+'/connect');
+        });
+
+        $('a.laceup-donate-link').each(function() {
+            $(this).attr('href', settings.appUrl+'/donate');
+        });
+
+        $('a.laceup-stravaclub-link').each(function() {
+            $(this).attr('href', this.data('stravaClub'));
+        });
+
+        return this;
+
+    };
+
     $.fn.laceUpUserStatus = function(options) {
 
         var settings = $.extend({
             refreshSeconds: 240,
-            signupBtnSelector: '.signupbutton'
+            signupBtnSelector: '.signupbutton',
+            connectURL: this.data('appUrl')+'/connect',
+            donateURL: this.data('appUrl')+'/donate'
         }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
         var handleJoin = function(data){
@@ -39,22 +61,18 @@
 
             $(settings.signupBtnSelector).each(function() {
 
-                if(!$(this).data('href-original')){ //only do this the first time
-                    $(this).data('href-original',$(this).attr('href'));
-                }
-
                 if(data.paid){
 
                     $(this)
                         .text($(this).data('text-profile')) //set the profile text, eg. "Mein Profil"
-                        .attr('href',$(this).data('href-original')); //set the original URL (not the support url)
+                        .attr('href',settings.connectURL); //set the profile URL
 
                 }
                 else{
 
                     $(this)
                         .text($(this).data('text-support'))
-                        .attr('href',$(this).data('href-original').replace('/connect','/donate')); //set the support url
+                        .attr('href',settings.donateURL); //set the support url
 
                 }
 
@@ -428,7 +446,7 @@
                             $(lbItem).find('.result-name').html(val.athlete.name);
                             $(lbItem).find('.result-time').html('<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+val.effort.effort_strava_link+'">'+val.ranking_time+'</a>');
 
-                            $(lbItem).removeClass('result-rank-'+rankItem).addClass('result-rank-'+val.rank); //used to display the gold/silver/bronze badge
+                            $(lbItem).removeClass('result-rank-'+rankItem).addClass('result-rank-'+val.rank); //remove the class to find the correct row (unique, 1,2,3) and add the actual ranking (not unique, can be 1,1,3) used to display the gold/silver/bronze badge
 
                         });
                     });
