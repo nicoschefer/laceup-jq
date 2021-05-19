@@ -5,11 +5,11 @@
         var settings = $.extend(this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
         $('a.laceup-connect-link').each(function() {
-            $(this).attr('href', settings.appUrl+'/'+settings.slug+'/connect');
+            $(this).attr('href', settings.appUrl+'/tour/'+settings.slug+'/connect');
         });
 
         $('a.laceup-donate-link').each(function() {
-            $(this).attr('href', settings.appUrl+'/'+settings.slug+'/donate');
+            $(this).attr('href', settings.appUrl+'/tour/'+settings.slug+'/donate');
         });
 
         $('a.laceup-stravaclub-link').each(function() {
@@ -28,8 +28,8 @@
         var settings = $.extend({
             refreshSeconds: 240,
             signupBtnSelector: '.signupbutton',
-            connectURL: this.data('appUrl')+'/'+this.data('slug')+'/'+'/connect',
-            donateURL: this.data('appUrl')+'/'+this.data('slug')+'/'+'/donate',
+            connectURL: this.data('appUrl')+'/tour/'+this.data('slug')+'/connect',
+            donateURL: this.data('appUrl')+'/tour/'+this.data('slug')+'/donate',
         }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
         var handleJoin = function(data){
