@@ -104,13 +104,12 @@
                     },
                     500: function() {
 
-                        console.log("me.json  error:");
-                        console.log(data);
+                        console.log("me.json error");
 
                     },
                     200: function(data) {
 
-                        console.log("me.json  success:");
+                        console.log("me.json success:");
                         console.log(data);
 
                         if(data.tour.slug === settings.slug && data.id && data.paid) {
