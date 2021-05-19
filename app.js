@@ -66,7 +66,7 @@
 
                 if(data.paid){
 
-
+                    //same URL if connect
                     $(this).text($(this).data('text-profile')); //set the profile text, eg. "Mein Profil"
 
                 }
@@ -96,73 +96,85 @@
                 xhrFields: {
                     withCredentials: true
                 },
-                success: function(data) {
+                statusCode: {
+                    403: function() { //forbidden - not logged in
 
-                    if(data.tour.slug === settings.slug && data.id && data.paid) {
+                        console.log("me.json forbidden - not logged in");
 
-                        $('.laceup-show-if-free-user').hide();
-                        $('.laceup-show-if-unknown-user').hide();
-                        $('.laceup-show-if-known-user').show();
-                        $('.laceup-show-if-paid-user').show();
+                        return data;
+
+                    },
+                    500: function() {
+
+                        console.log("me.json  error:");
+                        console.log(data);
+
+                        return data;
+
+                    },
+                    200: function(data) {
+
+                        console.log("me.json  success:");
+
+                        if(data.tour.slug === settings.slug && data.id && data.paid) {
+
+                            $('.laceup-show-if-free-user').hide();
+                            $('.laceup-show-if-unknown-user').hide();
+                            $('.laceup-show-if-known-user').show();
+                            $('.laceup-show-if-paid-user').show();
+
+                        }
+                        else if(data.tour.slug === settings.slug && data.id && !data.paid){
+
+                            $('.laceup-show-if-paid-user').hide();
+                            $('.laceup-show-if-unknown-user').hide();
+                            $('.laceup-show-if-known-user').show();
+                            $('.laceup-show-if-free-user').show();
+                        }
+                        else{
+
+                            $('.laceup-show-if-paid-user').hide();
+                            $('.laceup-show-if-free-user').hide();
+                            $('.laceup-show-if-known-user').hide();
+                            $('.laceup-show-if-unknown-user').show();
+
+                        }
+
+                        if(data.tour.slug === settings.slug && data.id && data.firstname) {
+
+                            $('.laceup-profile-placeholder').each(function() {
+
+                                $(this).text(
+                                    $(this).text()
+                                        .replace('$$firstname$$', data.firstname)
+                                        .replace('$$lastname$$', data.lastname)
+                                );
+
+                            });
+
+                        }
+
+                        if(data.tour.slug === settings.slug){
+
+                            handleJoin(data);
+                            handleSupportName(data);
+                            handleSignupButton(data);
+
+                        }
+                        else{
+
+                            console.log("me.json: Tour slug mismatch");
+
+                        }
+
+                        // Set the user ID using signed-in user_id.
+                        if (typeof gtag === 'function') {
+                            gtag('set', {'user_id': data.id});
+                        } else if (typeof ga === 'function') {
+                            ga('set', 'userId', data.id);
+                        }
 
                     }
-                    else if(data.tour.slug === settings.slug && data.id && !data.paid){
-
-                        $('.laceup-show-if-paid-user').hide();
-                        $('.laceup-show-if-unknown-user').hide();
-                        $('.laceup-show-if-known-user').show();
-                        $('.laceup-show-if-free-user').show();
-                    }
-                    else{
-
-                        $('.laceup-show-if-paid-user').hide();
-                        $('.laceup-show-if-free-user').hide();
-                        $('.laceup-show-if-known-user').hide();
-                        $('.laceup-show-if-unknown-user').show();
-
-                    }
-
-                    if(data.tour.slug === settings.slug && data.id && data.firstname) {
-
-                        $('.laceup-profile-placeholder').each(function() {
-
-                            $(this).text(
-                                $(this).text()
-                                    .replace('$$firstname$$', data.firstname)
-                                    .replace('$$lastname$$', data.lastname)
-                            );
-
-                        });
-
-                    }
-
-                    if(data.tour.slug === settings.slug){
-
-                        handleJoin(data);
-                        handleSupportName(data);
-                        handleSignupButton(data);
-
-                    }
-                    else{
-
-                        console.log("me.json: Tour slug mismatch");
-
-                    }
-
-                    // Set the user ID using signed-in user_id.
-                    if (typeof gtag === 'function') {
-                        gtag('set', {'user_id': data.id});
-                    } else if (typeof ga === 'function') {
-                        ga('set', 'userId', data.id);
-                    }
-
-                },
-                error: function(data) {
-
-                    console.log("Error:");
-                    console.log(data);
-
-                    return data;
                 }
             });
 
