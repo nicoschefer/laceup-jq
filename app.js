@@ -13,7 +13,7 @@
         });
 
         $('a.laceup-stravaclub-link').each(function() {
-            $(this).attr('href', settings.data('stravaClub'));
+            $(this).attr('href', settings.data('stravaClubLink'));
         });
 
         console.log("laceUpInit");
