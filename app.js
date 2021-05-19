@@ -66,16 +66,15 @@
 
                 if(data.paid){
 
-                    $(this)
-                        .text($(this).data('text-profile')) //set the profile text, eg. "Mein Profil"
-                        .attr('href',settings.connectURL); //set the profile URL
+
+                    $(this).text($(this).data('text-profile')); //set the profile text, eg. "Mein Profil"
 
                 }
                 else{
 
                     $(this)
-                        .text($(this).data('text-support'))
-                        .attr('href',settings.donateURL); //set the support url
+                        .text($(this).data('text-support'))//set the support text, eg. "Jetzt unterstützen"
+                        .attr('href',settings.appUrl+'/tour/'+settings.slug+'/donate'); //set the support url
 
                 }
 
