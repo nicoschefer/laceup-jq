@@ -235,7 +235,6 @@
                           elapsed_time
                           stage {
                             name
-                            segment
                           }
                           ranking {
                             rank
@@ -436,14 +435,14 @@
 
         this.loadContent = function() {
 
-            $(settings.mainSelector).each(function(index, el) { //data-sex="F", data-sex="M", .podium-strava-segment-id (div element containing the strava segment id), data-limit="3"
+            $(settings.mainSelector).each(function(index, el) { //data-sex="F", data-sex="M", .podium-laceup-stage-id (div element containing the stage id), data-limit="3"
 
                 var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
 
-                var stravaSegmentId = $(el).closest('.podium-item').find('.podium-strava-segment-id').html(); //Webflow workaround: not possible to populate a data- attribute from a collection
+                var stageId = $(el).closest('.podium-item').find('.podium-laceup-stage-id').html(); //Webflow workaround: not possible to populate a data- attribute from a collection
 
                 $.getJSON(
-                    eleSettings.appUrl + "/api/rankings?stage.segment="+stravaSegmentId+"&sex="+$(el).data('sex')+"&itemsPerPage="+eleSettings.limit,
+                    eleSettings.appUrl + "/api/rankings?stage.id="+stageId+"&sex="+$(el).data('sex')+"&itemsPerPage="+eleSettings.limit,
                     function(response) {
 
                         $.each(response, function( key, val ) {
@@ -501,13 +500,13 @@
 
         this.loadContent = function() {
 
-            $(settings.mainSelector+':not([data-segment=""])').each(function(index, el) {
+            $(settings.mainSelector+':not([data-stageid=""])').each(function(index, el) {
 
                 var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
 
                 $(el).DataTable({
                     "ajax": {
-                        url: eleSettings.appUrl+"/api/rankings?stage.segment="+$(el).data('segment')+"&sex="+$(el).data('sex')+"&pagination=false",
+                        url: eleSettings.appUrl+"/api/rankings?stage.id="+$(el).data('stageid')+"&sex="+$(el).data('sex')+"&pagination=false",
                         dataSrc: ""
                     },
                     "processing": true,
@@ -745,6 +744,9 @@
         return this;
 
     };
+
+
+    //https://app.laceup.io/api/stages/50.json
 
 
 })(jQuery);
