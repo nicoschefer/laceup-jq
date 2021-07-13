@@ -223,8 +223,7 @@
                     efforts(
                       last: `+settings.lastActivities+`,
                       order: {start_date: "asc"},
-                      stage_tour_slug: "`+settings.slug+`",
-                      start_date: {after: "`+settings.fromDate+`", before: "`+settings.toDate+`"}
+                      stage_tour_slug: "`+settings.slug+`"
                       ) {
                       edges {
                         node {
