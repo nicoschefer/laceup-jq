@@ -360,6 +360,9 @@
                                       name
                                       paid
                                     }
+                                    tour {
+                                       mode
+                                    }
                                   }
                                 }
                               }
@@ -367,6 +370,9 @@
                     success: function(response) {
 
                         $.each(response.data.overallRankings.edges, function( key, val ) {
+
+                            console.log(val.node);
+
                             var ranking = val.node;
                             var lag = "";
                             if (ranking.stage_lag > 0) {
@@ -375,11 +381,13 @@
                                 lag = "+" + ranking.time_to_first_formatted;
                             }
 
+                            var numberOfStage = (ranking.tour.mode ==='enduro') ? '' : '<br><small class="paragraph-light paragraph-small">'+ranking.number_of_stages+' Etappe(n)</small>';
+
                             var itemHTML = '<div class="result-item result-rank-'+ranking.rank+'">'+
                                 '<div class="result-rank"><div>'+ranking.rank+'</div></div>'+
                                 '<div class="result-name truncate">'+
                                 ranking.athlete.name+
-                                '<br><small class="paragraph-light paragraph-small">'+ranking.number_of_stages+' Etappe(n)</small>'+
+                                numberOfStage+
                                 '</div>'+
                                 '<div class="result-time">'+
                                 ranking.ranking_time+
