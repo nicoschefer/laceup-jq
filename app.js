@@ -374,10 +374,10 @@
                             console.log(val.node);
 
                             var ranking = val.node;
-                            var lag = "";
+                            var lag = "&nbsp;"; //first rank
                             if (ranking.stage_lag > 0) {
                                 lag = "+" + ranking.stage_lag + " Etappe(n)";
-                            } else if (key > 0) {
+                            } else if (ranking.time_to_first > 0) {
                                 lag = "+" + ranking.time_to_first_formatted;
                             }
 
