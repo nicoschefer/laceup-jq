@@ -394,7 +394,7 @@
                             var numberOfStage = (ranking.tour.mode ==='enduro') ? '' : '<br><small class="paragraph-light paragraph-small">'+ranking.number_of_stages+' Etappe(n)</small>';
 
                             var itemHTML = '<div class="result-item result-rank-'+ranking.rank+'">'+
-                                '<div class="result-rank'+(ranking.athlete.paid ? 'result-rank-paid' : '')+'"><div>'+ranking.rank+'</div></div>'+
+                                '<div class="result-rank '+(ranking.athlete.paid ? 'result-rank-paid' : '')+'"><div>'+ranking.rank+'</div></div>'+
                                 '<div class="result-name truncate">'+
                                 ranking.athlete.name+
                                 numberOfStage+
@@ -717,10 +717,7 @@
 
                     $(settings.mainSelector).html("");
 
-                    const supporterResponseShuffled = supporterResponse.sort(()=> Math.random() - 0.5);
-
-                    console.log(supporterResponse);
-                    console.log(supporterResponseShuffled);
+                    const supporterResponseShuffled = supporterResponse.sort(()=> Math.random() - 0.5); //not perfect, but ok for a small array and no need for true randomness
 
                     $.each(supporterResponseShuffled, function( key, val ) {
 
