@@ -101,10 +101,20 @@
 
                         console.log("me.json forbidden - not logged in");
 
+                        $('.laceup-show-if-paid-user').hide();
+                        $('.laceup-show-if-free-user').hide();
+                        $('.laceup-show-if-known-user').hide();
+                        $('.laceup-show-if-unknown-user').show();
+
                     },
                     500: function() {
 
                         console.log("me.json error");
+
+                        $('.laceup-show-if-paid-user').hide();
+                        $('.laceup-show-if-free-user').hide();
+                        $('.laceup-show-if-known-user').hide();
+                        $('.laceup-show-if-unknown-user').show();
 
                     },
                     200: function(data) {
@@ -371,7 +381,7 @@
 
                         $.each(response.data.overallRankings.edges, function( key, val ) {
 
-                            console.log(val.node);
+                            //console.log(val.node);
 
                             var ranking = val.node;
                             var lag = "&nbsp;"; //first rank
@@ -384,7 +394,7 @@
                             var numberOfStage = (ranking.tour.mode ==='enduro') ? '' : '<br><small class="paragraph-light paragraph-small">'+ranking.number_of_stages+' Etappe(n)</small>';
 
                             var itemHTML = '<div class="result-item result-rank-'+ranking.rank+'">'+
-                                '<div class="result-rank"><div>'+ranking.rank+'</div></div>'+
+                                '<div class="result-rank'+(ranking.athlete.paid ? 'result-rank-paid' : '')+'"><div>'+ranking.rank+'</div></div>'+
                                 '<div class="result-name truncate">'+
                                 ranking.athlete.name+
                                 numberOfStage+
@@ -706,6 +716,10 @@
                 success: function(supporterResponse) {
 
                     $(settings.mainSelector).html("");
+
+                    console.log(supporterResponse);
+
+                    supporterResponse = list.sort(() => Math.random() - 0.5); //shuffle. Not very nice, but small array and no need for true randomness.
 
                     $.each(supporterResponse, function( key, val ) {
 
