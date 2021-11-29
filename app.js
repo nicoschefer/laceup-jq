@@ -717,11 +717,12 @@
 
                     $(settings.mainSelector).html("");
 
+                    const supporterResponseShuffled = supporterResponse => supporterResponse.map(a => ({ sort: Math.random(), value: a })).sort((a, b) => a.sort - b.sort).map(a => a.value);
+
                     console.log(supporterResponse);
+                    console.log(supporterResponseShuffled);
 
-                    supporterResponse = list.sort(() => Math.random() - 0.5); //shuffle. Not very nice, but small array and no need for true randomness.
-
-                    $.each(supporterResponse, function( key, val ) {
+                    $.each(supporterResponseShuffled, function( key, val ) {
 
                         if(val.strava_id === 3129449) return; //Nico
                         if(val.strava_id === 9959175) return; //Sebastian
