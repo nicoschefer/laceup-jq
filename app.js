@@ -717,7 +717,7 @@
 
                     $(settings.mainSelector).html("");
 
-                    const supporterResponseShuffled = supporterResponse => supporterResponse.map(a => ({ sort: Math.random(), value: a })).sort((a, b) => a.sort - b.sort).map(a => a.value);
+                    const supporterResponseShuffled = supporterResponse.sort(()=> Math.random() - 0.5);
 
                     console.log(supporterResponse);
                     console.log(supporterResponseShuffled);
