@@ -266,7 +266,6 @@ var _rollbarConfig = {
                             rank
                           }
                           athlete {
-                            bib
                             name
                             profile
                             paid
