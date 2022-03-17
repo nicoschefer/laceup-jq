@@ -556,7 +556,7 @@
                             "title": "Name",
                             "data": "athlete.name",
                             "render": function(name, type, row) {
-                                return '<a style="text-decoration: none;" href="https://strava.com/athletes/'+row.athlete.strava_id+'" target="_blank">'+name+'</a>';
+                                return '<a style="text-decoration: none;" href="'+row.athlete.oauth_link+'" target="_blank">'+name+'</a>';
                             }
                         },
                         {
@@ -637,7 +637,7 @@
                             "title": "Name",
                             "data": "athlete.name",
                             "render": function(name, type, row) {
-                                return '<a style="text-decoration: none;" href="https://strava.com/athletes/'+row.athlete.strava_id+'" target="_blank">'+name+'</a>';
+                                return '<a style="text-decoration: none;" href="'+row.athlete.oauth_link+'" target="_blank">'+name+'</a>';
                             }
                         },
                         {
@@ -721,11 +721,11 @@
 
                     $.each(supporterResponseShuffled, function( key, val ) {
 
-                        if(val.strava_id === 3129449) return; //Nico
-                        if(val.strava_id === 9959175) return; //Sebastian
-                        if(val.strava_id === 16814702) return; //Tobias
+                        if(val.oauth_id === 3129449) return; //Nico
+                        if(val.oauth_id === 9959175) return; //Sebastian
+                        if(val.oauth_id === 16814702) return; //Tobias
 
-                        $(settings.mainSelector).append("<a href='https://www.strava.com/athletes/"+val.strava_id+"' class='link-inline' target='_blank'>"+val.firstname+" "+val.lastname+"</a> ");
+                        $(settings.mainSelector).append("<a href='"+val.oauth_link+"' class='link-inline' target='_blank'>"+val.name+"</a> ");
 
                     });
 
