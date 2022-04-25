@@ -254,7 +254,6 @@ var _rollbarConfig = {
                       ) {
                       edges {
                         node {
-                          strava_id
                           start_date
                           ranking_time
                           effort_strava_link
@@ -284,8 +283,6 @@ var _rollbarConfig = {
                     $.each(result.data.efforts.edges, function( key, val ) {
 
                         var effortTimeAgo = moment(val.node.start_date).fromNow();
-
-                        $(htmlScaffold).data('strava-id', val.node.strava_id); //allows us to identify the item
 
                         if(val.node.athlete.paid){
                             $(htmlScaffold).addClass('recent-item-paid');
