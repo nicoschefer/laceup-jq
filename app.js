@@ -243,7 +243,7 @@ var _rollbarConfig = {
 
             console.log('Loading recent, last '+settings.lastActivities);
 
-            $.ajax({url: settings.appUrl + "/api/graphql",
+            $.ajax({url: settings.appUrl + "/api/graphql?recent-activities",
                 contentType: "application/json",
                 type:'POST',
                 data: JSON.stringify({ query:`{
@@ -362,7 +362,7 @@ var _rollbarConfig = {
                 $(el).html('');
 
                 $.ajax({
-                    url: eleSettings.appUrl + "/api/graphql",
+                    url: eleSettings.appUrl + "/api/graphql?leaderboard",
                     contentType: "application/json",
                     type: 'POST',
                     data: JSON.stringify({
