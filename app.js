@@ -535,6 +535,7 @@ var _rollbarConfig = {
                 var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
 
                 $(el).DataTable({
+                    "retrieve": true,
                     "ajax": {
                         url: eleSettings.appUrl+"/api/rankings?stage.id="+$(el).data('stageid')+"&sex="+$(el).data('sex')+"&pagination=false",
                         dataSrc: ""
@@ -618,6 +619,7 @@ var _rollbarConfig = {
                 var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
 
                 $(el).DataTable({
+                    "retrieve": true,
                     "ajax": {
                         url: eleSettings.appUrl+"/api/overall_rankings?tour.slug="+eleSettings.slug+"&sex="+$(el).data('sex')+"&pagination=false",
                         dataSrc: ""
