@@ -866,8 +866,8 @@ var _rollbarConfig = {
                                 var badgeHtml = '';
                                 $.each(availableBadges, function(key, thisBadge ) {
 
-                                    //var isPassive = athBadges.includes(thisBadge) ? '' : 'achieved-badge-passive';
-                                    var isPassive = ((Math.random()*(row.rank/2)) < 1) ? '' : 'achieved-badge-passive';
+                                    var isPassive = athBadges.includes(thisBadge) ? '' : 'achieved-badge-passive';
+                                    //var isPassive = ((Math.random()*(row.rank/2)) < 1) ? '' : 'achieved-badge-passive';
 
                                     badgeHtml += '<div class="achieved-badge '+isPassive+' '+thisBadge+'"></div>';
 
