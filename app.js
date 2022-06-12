@@ -864,6 +864,10 @@ var _rollbarConfig = {
 
                                 var athBadges = extractBadges(row.badges);
                                 var badgeHtml = '';
+                                console.log(row);
+                                console.log(athBadges);
+                                console.log('-----------------');
+
                                 $.each(availableBadges, function(key, thisBadge ) {
 
                                     var isPassive = athBadges.includes(thisBadge) ? '' : 'achieved-badge-passive';
