@@ -862,11 +862,8 @@ var _rollbarConfig = {
                             "title": translate('badges'),
                             "render": function(data, type, row) {
 
-                                var athBadges = extractBadges(row.badges);
+                                var athBadges = extractBadges(row.athlete.badges);
                                 var badgeHtml = '';
-                                console.log(row);
-                                console.log(athBadges);
-                                console.log('-----------------');
 
                                 $.each(availableBadges, function(key, thisBadge ) {
 
