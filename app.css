@@ -108,8 +108,8 @@
     font-size: 14px;
     margin: 0.9em;
 }
-.dataTables_wrapper th .dt-body-right{ /* Title: time */
-    text-align: right;
+.dataTables_wrapper th.dt-body-right{ /* Title: time */
+    text-align: right!important;
 }
 
 /* Overall ranking table ------------------------------------------------------------ */
