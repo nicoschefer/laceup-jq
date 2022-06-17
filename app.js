@@ -772,7 +772,7 @@ var _rollbarConfig = {
                         api.column(3, {page: 'current'} ).data().each( function ( group, i ) {
                             if ( last !== group ) {
                                 $(rows).eq( i ).before(
-                                    '<tr style="text-align: center;"><td colspan="6">'+group+' Etappe(n)</td></tr>'
+                                    '<tr style="text-align: center;"><td colspan="6"><small>'+group+' Etappe(n)</small></td></tr>'
                                 );
                                 last = group;
                             }
@@ -911,7 +911,7 @@ var _rollbarConfig = {
                         api.column(3, {page: 'current'} ).data().each( function ( group, i ) {
                             if ( last !== group ) {
                                 $(rows).eq( i ).before(
-                                    '<tr style="text-align: center;"><td colspan="7">'+group+' '+translate('n_stages')+'</td></tr>'
+                                    '<tr style="text-align: center;"><td colspan="7"><small>'+group+' '+translate('n_stages')+'</small></td></tr>'
                                 );
                                 last = group;
                             }
