@@ -764,20 +764,7 @@ var _rollbarConfig = {
                         { responsivePriority: 6, targets: 3, width: '5%' }, // stages
                         { responsivePriority: 4, targets: 4, className: 'dt-body-right', width: '10%' }, // time
                         { responsivePriority: 5, targets: 5, className: 'dt-body-right', width: '10%' } // time back
-                    ],
-                    "drawCallback": function () {
-                        var api = this.api();
-                        var rows = api.rows( {page: 'current'} ).nodes();
-                        var last = null;
-                        api.column(3, {page: 'current'} ).data().each( function ( group, i ) {
-                            if ( last !== group ) {
-                                $(rows).eq( i ).before(
-                                    '<tr style="text-align: center;"><td colspan="6">'+group+' Etappe(n)</td></tr>'
-                                );
-                                last = group;
-                            }
-                        });
-                    }
+                    ]
                 });
             });
 
