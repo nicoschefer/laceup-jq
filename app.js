@@ -799,7 +799,6 @@ var _rollbarConfig = {
         //hare: All stages in one day
         //bat: An effort from dusk till dawn
 
-
         var settings = $.extend({
             mainSelector: '.laceup-ranking',
             paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
@@ -807,12 +806,12 @@ var _rollbarConfig = {
 
         this.loadContent = function() {
 
-            //Allow overwriting the available badges
-            var availableBadges = eleSettings.badges ? eleSettings.badges.split(',') : ["bee","bat","hare"];
-
             $(settings.mainSelector).each(function(index, el) {
 
                 var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
+
+                //Allow overwriting the available badges
+                var availableBadges = eleSettings.badges ? eleSettings.badges.split(',') : ["bee","bat","hare"];
 
                 $(el).DataTable({
                     "retrieve": true,
