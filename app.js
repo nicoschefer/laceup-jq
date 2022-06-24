@@ -946,7 +946,6 @@ var _rollbarConfig = {
             $.getJSON(settings.appUrl + "/api/stages.json?tour.slug="+settings.slug, function(stagesData) {
 
                 let stagesDataById = [];
-
                 $.each(stagesData, function(key, stageData) {
                     stagesDataById['stage-'+stageData.id] = stageData; //Prefix stage- to avoid integers as associative array keys
                 });
@@ -955,12 +954,13 @@ var _rollbarConfig = {
 
                     var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
 
-                    console.log(eleSettings.badges)
                     //Allow overwriting the available badges
                     var availableBadges = eleSettings.badges.length ? eleSettings.badges.split(',') : ["bee","bat","hare"];
 
                     var url = eleSettings.appUrl + "/api/trophies.json?tour.slug="+eleSettings.slug+"&type="+eleSettings.trophyType+"&sex="+eleSettings.sex+"&"+(eleSettings.limit?'itemsPerPage='+eleSettings.limit:'paginate=false');
-                    $.getJSON(url,function(response) {
+                    $.getJSON(url, function(response) {
+
+                            $(el).empty();
 
                             $.each(response, function( key, val ) {
 
@@ -993,6 +993,10 @@ var _rollbarConfig = {
                                 $(el).append(itemHTML);
 
                             });
+
+                            if(!response.length){
+                                $(el).append('<p>'+translate('no_results')+'</p>');
+                            }
 
                         });
                 });
