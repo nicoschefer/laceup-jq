@@ -99,6 +99,56 @@
 
 
 
+/* Trophy ranking ------------------------------------------------------------ */
+
+.trophy-item {
+    clear: right;
+    margin-bottom: 10px;
+}
+.trophy-rank{
+    float: left;
+    margin-right: 10px;
+}
+.trophy-name{
+    float: left;
+    margin-right: 10px;
+}
+.trophy-badges{
+    float: left;
+    margin-right: 10px;
+}
+.trophy-stages {
+
+}
+.trophy-stage-badge {
+    float: right;
+    width: 32px;
+    height: 32px;
+
+    border-radius: 50%;
+    background-position: center;
+    background-size: cover;
+
+    border:2px solid #ffc800;
+
+    font-size: 0.8em;
+    text-align: center;
+    color: #808080c7;
+    cursor: default;
+}
+
+@media only screen and (max-width: 600px) {
+    .trophy-item{
+        margin-bottom: 20px;
+    }
+    .trophy-stages {
+        clear: left;
+    }
+    .trophy-stage-badge {
+        float: left;
+    }
+}
+
 /* Etappen ranking table ------------------------------------------------------------ */
 
 .dataTables_wrapper .dataTables_length { /* pagination page size selector */
@@ -205,9 +255,6 @@ table.dataTable .ranking-time.ranking-time-back{
 .achieved-badge.bee{
     background-image: url("https://nicoschefer.github.io/laceup-jq/img/badge-bee.svg");
 }
-
-
-
 /* ------------------------------------------------------------ */
 
 /* ------------------------------------------------------------ */
@@ -228,4 +275,9 @@ table.dataTable .ranking-time.ranking-time-back{
 /*  Helper ---------------------------------------------------- */
 .truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rich-text-block a { display: inline; } /* prevent links in rich textblocks from breaking */
+.clearfix::after {
+    content: "";
+    display: block;
+    clear: both;
+}
 /*  ---------------------------------------------------- */

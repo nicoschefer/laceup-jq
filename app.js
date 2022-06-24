@@ -808,7 +808,7 @@ var _rollbarConfig = {
         this.loadContent = function() {
 
             //Allow overwriting the available badges
-            var availableBadges = (settings.badges instanceof Array) ? settings.badges : ["bee","bat","hare"];
+            var availableBadges = eleSettings.badges ? eleSettings.split(',') : ["bee","bat","hare"];
 
             $(settings.mainSelector).each(function(index, el) {
 
@@ -863,18 +863,18 @@ var _rollbarConfig = {
                             "render": function(data, type, row) {
 
                                 var athBadges = extractBadges(row.athlete.badges);
-                                var badgeHtml = '';
+                                var badgesHtml = '';
 
                                 $.each(availableBadges, function(key, thisBadge ) {
 
                                     var isPassive = athBadges.includes(thisBadge) ? '' : 'achieved-badge-passive';
                                     //var isPassive = ((Math.random()*(row.rank/2)) < 1) ? '' : 'achieved-badge-passive';
 
-                                    badgeHtml += '<div class="achieved-badge '+isPassive+' '+thisBadge+'"></div>';
+                                    badgesHtml += '<div class="achieved-badge '+isPassive+' '+thisBadge+'"></div>';
 
                                 });
 
-                                return '<div class="badge-container">'+badgeHtml+'</div>';
+                                return '<div class="badge-container">'+badgesHtml+'</div>';
                             }
                         },
                         {
@@ -924,6 +924,99 @@ var _rollbarConfig = {
 
         };
 
+
+        this.loadContent();
+
+        return this;
+
+    };
+
+
+    $.fn.laceUpTrophyRanking = function(options) {
+
+        var settings = $.extend({
+            mainSelector: '.laceup-trophy-ranking',
+            trophyType: null, //Required! eg. stage_completion_effort_count
+            refreshSeconds: 240,
+            sex: 'X'
+        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
+
+        this.loadContent = function() {
+
+
+            $.getJSON(settings.appUrl + "/api/stages.json?tour.slug="+settings.slug, function(stagesData) {
+
+                let stagesDataById = [];
+
+                $.each(stagesData, function(key, stageData) {
+                    stagesDataById['stage-'+stageData.id] = stageData; //Prefix stage- to avoid integers as associative array keys
+                });
+
+                $(settings.mainSelector).each(function(index, el) { //data-sex="F", data-sex="M", .podium-laceup-stage-id (div element containing the stage id), data-limit="3"
+
+                    var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
+
+                    //Allow overwriting the available badges
+                    var availableBadges = eleSettings.badges ? eleSettings.split(',') : ["bee","bat","hare"];
+
+                    var url = eleSettings.appUrl + "/api/trophies.json?tour.slug="+eleSettings.slug+"&type="+eleSettings.trophyType+"&sex="+eleSettings.sex+"&"+(eleSettings.limit?'itemsPerPage='+eleSettings.limit:'paginate=false');
+                    $.getJSON(url,function(response) {
+
+                            $.each(response, function( key, val ) {
+
+                                var athBadges = extractBadges(val.athlete.badges);
+                                var badgesHtml = '';
+                                $.each(availableBadges, function(key, thisBadge ) {
+
+                                    var isPassive = athBadges.includes(thisBadge) ? '' : 'achieved-badge-passive';
+                                    badgesHtml += '<div class="achieved-badge '+isPassive+' '+thisBadge+'"></div>';
+
+                                });
+
+                                var stagesHTML = '';
+                                $.each(val.data.distinct_stage_ids, function(key, stageId) {
+                                    if(stageId){
+                                        stagesHTML += '<div role="img" class="trophy-stage-badge trophy-stage-id-'+stageId+'" title="'+stagesDataById['stage-'+stageId].name+'">'+stageId+'</div>';
+                                    }
+                                });
+
+                                var itemHTML =
+                                    '<div class="trophy-item trophy-rank-'+val.rank+' clearfix">'+
+                                        '<div class="trophy-rank '+(val.athlete.paid ? 'trophy-rank-paid' : '')+'">' +
+                                            '<div>'+val.rank+'</div>' +
+                                        '</div>'+
+                                        '<div class="trophy-name truncate">'+val.athlete.name+'</div>'+
+                                        '<div class="trophy-badges">'+badgesHtml+'</div>'+
+                                        '<div class="trophy-stages clearfix">'+stagesHTML+'</div>'+
+                                    '</div>';
+
+                                $(el).append(itemHTML);
+
+                            });
+
+                        });
+                });
+
+            });
+
+            return this;
+
+        };
+
+        function triggerRefresh($that)
+        {
+
+            if(settings.refreshSeconds > 0){ //set 0 to disable refresh
+
+                setInterval(function(){
+                    $that.loadContent();
+                }, 1000*settings.refreshSeconds);
+
+            }
+
+        }
+
+        triggerRefresh(this);
 
         this.loadContent();
 
