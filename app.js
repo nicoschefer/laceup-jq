@@ -808,7 +808,7 @@ var _rollbarConfig = {
         this.loadContent = function() {
 
             //Allow overwriting the available badges
-            var availableBadges = eleSettings.badges ? eleSettings.split(',') : ["bee","bat","hare"];
+            var availableBadges = eleSettings.badges ? eleSettings.badges.split(',') : ["bee","bat","hare"];
 
             $(settings.mainSelector).each(function(index, el) {
 
@@ -957,7 +957,7 @@ var _rollbarConfig = {
                     var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
 
                     //Allow overwriting the available badges
-                    var availableBadges = eleSettings.badges ? eleSettings.split(',') : ["bee","bat","hare"];
+                    var availableBadges = eleSettings.badges ? eleSettings.badges.split(',') : ["bee","bat","hare"];
 
                     var url = eleSettings.appUrl + "/api/trophies.json?tour.slug="+eleSettings.slug+"&type="+eleSettings.trophyType+"&sex="+eleSettings.sex+"&"+(eleSettings.limit?'itemsPerPage='+eleSettings.limit:'paginate=false');
                     $.getJSON(url,function(response) {
