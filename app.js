@@ -1019,15 +1019,14 @@ var _rollbarConfig = {
 
     $.fn.laceUpTrophyRanking = function(options) {
 
-        this.laceUpOverallTrophy(options);
+        this.laceUpOverallTrophyStageCompletion(options);
     };
 
 
-    $.fn.laceUpOverallTrophy = function(options) {
+    $.fn.laceUpOverallTrophyStageCompletion = function(options) {
 
         var settings = $.extend({
             mainSelector: '.laceup-trophy-ranking',
-            trophyType: null, //Required! eg. stage_completion_effort_count
             refreshSeconds: 240,
             sex: 'X'
         }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
@@ -1048,7 +1047,7 @@ var _rollbarConfig = {
                     //Allow overwriting the available badges
                     var availableBadges = (eleSettings.badges !== undefined) ? eleSettings.badges.split(',') : ["bee","bat","hare"];
 
-                    var apiURL = eleSettings.appUrl + "/api/trophies.json?tour.slug="+eleSettings.slug+"&type="+eleSettings.trophyType+"&sex="+eleSettings.sex+"&"+(eleSettings.limit?'itemsPerPage='+eleSettings.limit:'paginate=false');
+                    var apiURL = eleSettings.appUrl + "/api/trophies.json?tour.slug="+eleSettings.slug+"&type=stage_completion&sex="+eleSettings.sex+"&"+(eleSettings.limit?'itemsPerPage='+eleSettings.limit:'paginate=false');
 
                     console.log(apiURL);
 
