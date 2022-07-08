@@ -991,7 +991,8 @@ var _rollbarConfig = {
                             "title": "Datum",
                             "data": "start_date",
                             "render": function(data, type, row) {
-                                return '<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+row.effort.effort_strava_link+'">'+(new Date(data).toLocaleDateString('de-CH'))+'</a>';
+                                //(new Date(data).toLocaleDateString('de-CH'))
+                                return '<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+row.effort.effort_strava_link+'">'+data+'</a>';
                             }
                         },
                     ],
