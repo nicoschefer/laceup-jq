@@ -996,9 +996,9 @@ var _rollbarConfig = {
                         },
                     ],
                     columnDefs: [
-                        { targets: 1, width: '10%' },
-                        { targets: 2, width: '45%' },
-                        { targets: -1, className: 'dt-body-right', width: '45%' }
+                        { targets: 0, width: '10%' },
+                        { targets: 1, width: '45%' },
+                        { targets: 2, className: 'dt-body-right', width: '45%' }
                     ]
                 }).on('page.dt', function() { //on pagination click, scroll to top of the table
                     $('html, body').animate({
