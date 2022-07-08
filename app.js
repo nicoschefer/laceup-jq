@@ -1049,8 +1049,11 @@ var _rollbarConfig = {
                     //Allow overwriting the available badges
                     var availableBadges = (eleSettings.badges !== undefined) ? eleSettings.badges.split(',') : ["bee","bat","hare"];
 
-                    var url = eleSettings.appUrl + "/api/trophies.json?tour.slug="+eleSettings.slug+"&type="+eleSettings.trophyType+"&sex="+eleSettings.sex+"&"+(eleSettings.limit?'itemsPerPage='+eleSettings.limit:'paginate=false');
-                    $.getJSON(url, function(response) {
+                    var apiURL = eleSettings.appUrl + "/api/trophies.json?tour.slug="+eleSettings.slug+"&type="+eleSettings.trophyType+"&sex="+eleSettings.sex+"&"+(eleSettings.limit?'itemsPerPage='+eleSettings.limit:'paginate=false');
+
+                    console.log(apiURL);
+
+                    $.getJSON(apiURL, function(response) {
 
                             $(el).empty();
 
