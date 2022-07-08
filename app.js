@@ -931,7 +931,102 @@ var _rollbarConfig = {
     };
 
 
+    $.fn.laceUpStageTrophy = function(options) {
+
+        var settings = $.extend({
+            mainSelector: '.laceup-stagetrophy',
+            limit: 3,
+            paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
+        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
+
+
+        this.loadContent = function() {
+
+            $(settings.mainSelector+':not([data-stageid=""])').each(function(index, el) {
+
+                var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
+
+                var apiURL = eleSettings.appUrl+"/api/rankings?stage.id="+$(el).data('stageid')+"&sex="+$(el).data('sex')+"&pagination=false";
+
+                console.log(apiURL);
+
+                $(el).DataTable({
+                    "retrieve": true,
+                    "ajax": {
+                        url: apiURL,
+                        dataSrc: ""
+                    },
+                    "processing": true,
+                    "conditionalPaging": true,
+                    "lengthMenu": [[100, -1], [100, "Alle Resultate"]],
+                    "ordering": false,
+                    "searching": false,
+                    "info": false,
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json",
+                        "emptyTable": "Noch keine Resultate"
+                    },
+                    "columns": [
+                        { "title": "Rang", "data": "rank" },
+                        {
+                            "title": "",
+                            "data": "athlete.profile",
+                            "render": function(data, type, row) {
+
+                                return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
+                                    '<div class="profile-img" style="background-image: url('+data+');">'+
+                                    (row.athlete.paid ?
+                                        ('<a class="ranking-paid-badge" title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>') :
+                                        '')+
+                                    '</div>'+
+                                    '</div>';
+                            }
+                        },
+                        {
+                            "title": "Name",
+                            "data": "athlete.name",
+                            "render": function(name, type, row) {
+                                return '<a style="text-decoration: none;" href="'+row.athlete.oauth_link+'" target="_blank">'+name+'</a>';
+                            }
+                        },
+                        {
+                            "title": "Zeit",
+                            "data": "ranking_time",
+                            "render": function(data, type, row) {
+                                return '<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+row.effort.effort_strava_link+'">'+data+'</a>';
+                            }
+                        },
+                    ],
+                    columnDefs: [
+                        { targets: 0, width: '5%' },
+                        { targets: 1, width: '10%' },
+                        { targets: 2, width: '50%' },
+                        { targets: -1, className: 'dt-body-right', width: '35%' }
+                    ]
+                }).on('page.dt', function() { //on pagination click, scroll to top of the table
+                    $('html, body').animate({
+                        scrollTop: $(el).offset().top
+                    }, 'fast');
+                });
+            });
+
+            return this;
+
+        };
+
+        this.loadContent();
+
+        return this;
+
+    };
+
     $.fn.laceUpTrophyRanking = function(options) {
+
+        laceUpOverallTrophy(options);
+    };
+
+
+    $.fn.laceUpOverallTrophy = function(options) {
 
         var settings = $.extend({
             mainSelector: '.laceup-trophy-ranking',
