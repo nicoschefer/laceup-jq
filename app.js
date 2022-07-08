@@ -1022,7 +1022,7 @@ var _rollbarConfig = {
 
     $.fn.laceUpTrophyRanking = function(options) {
 
-        laceUpOverallTrophy(options);
+        this.laceUpOverallTrophy(options);
     };
 
 
