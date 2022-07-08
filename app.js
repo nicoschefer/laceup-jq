@@ -1057,6 +1057,10 @@ var _rollbarConfig = {
 
                             $.each(response, function( key, val ) {
 
+                                if(!val.data.distinct_stage_ids.length){
+                                    return false; //break $.each
+                                }
+
                                 var athBadges = extractBadges(val.athlete.badges);
                                 var badgesHtml = '';
                                 $.each(availableBadges, function(key, thisBadge ) {
