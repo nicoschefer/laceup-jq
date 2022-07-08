@@ -600,7 +600,6 @@ var _rollbarConfig = {
 
         var settings = $.extend({
             mainSelector: '.laceup-stageranking',
-            limit: 3,
             paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
         }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
@@ -934,8 +933,7 @@ var _rollbarConfig = {
     $.fn.laceUpStageTrophy = function(options) {
 
         var settings = $.extend({
-            mainSelector: '.laceup-stagetrophy',
-            limit: 3,
+            mainSelector: '.laceup-trophy-stage',
             paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
         }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
@@ -990,10 +988,10 @@ var _rollbarConfig = {
                             }
                         },
                         {
-                            "title": "Zeit",
-                            "data": "ranking_time",
+                            "title": "Datum",
+                            "data": "start_date",
                             "render": function(data, type, row) {
-                                return '<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+row.effort.effort_strava_link+'">'+data+'</a>';
+                                return '<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+row.effort.effort_strava_link+'">'+(new Date(data).toLocaleDateString('de-CH'))+'</a>';
                             }
                         },
                     ],
@@ -1036,7 +1034,6 @@ var _rollbarConfig = {
         }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
         this.loadContent = function() {
-
 
             $.getJSON(settings.appUrl + "/api/stages.json?tour.slug="+settings.slug, function(stagesData) {
 
