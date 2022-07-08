@@ -965,7 +965,6 @@ var _rollbarConfig = {
                         "emptyTable": "Noch keine Resultate"
                     },
                     "columns": [
-                        { "title": "Rang", "data": "rank" },
                         {
                             "title": "",
                             "data": "athlete.profile",
@@ -989,18 +988,17 @@ var _rollbarConfig = {
                         },
                         {
                             "title": "Datum",
-                            "data": "start_date",
+                            "data": "effort.start_date",
                             "render": function(data, type, row) {
-                                //(new Date(data).toLocaleDateString('de-CH'))
-                                return '<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+row.effort.effort_strava_link+'">'+data+'</a>';
+                                //
+                                return '<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+row.effort.effort_strava_link+'">'+(new Date(data).toLocaleDateString('de-CH'))+'</a>';
                             }
                         },
                     ],
                     columnDefs: [
-                        { targets: 0, width: '5%' },
                         { targets: 1, width: '10%' },
-                        { targets: 2, width: '50%' },
-                        { targets: -1, className: 'dt-body-right', width: '35%' }
+                        { targets: 2, width: '45%' },
+                        { targets: -1, className: 'dt-body-right', width: '45%' }
                     ]
                 }).on('page.dt', function() { //on pagination click, scroll to top of the table
                     $('html, body').animate({
