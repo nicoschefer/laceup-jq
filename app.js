@@ -1057,7 +1057,10 @@ var _rollbarConfig = {
 
                             $.each(response, function( key, val ) {
 
-                                if(!val.data.distinct_stage_ids.length){
+                                console.log(val.data);
+
+                                //Note: if no stage, array [0]
+                                if(!val.data.distinct_stage_ids.length || val.data.distinct_stage_ids[0] === null){
                                     return false; //break $.each
                                 }
 
