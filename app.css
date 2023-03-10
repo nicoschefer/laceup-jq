@@ -136,7 +136,9 @@
     color: #808080c7;
     cursor: default;
 }
-
+.trophy-stage-badge::after {
+    content: ""; /* simplify adding content like the stage number */
+}
 @media only screen and (max-width: 600px) {
     .trophy-item{
         margin-bottom: 20px;

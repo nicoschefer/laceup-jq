@@ -1076,7 +1076,7 @@ var _rollbarConfig = {
                                 var stagesHTML = '';
                                 $.each(val.data.distinct_stage_ids, function(key, stageId) {
                                     if(stageId){
-                                        stagesHTML += '<div role="img" class="trophy-stage-badge trophy-stage-id-'+stageId+'" title="'+stagesDataById['stage-'+stageId].name+'">'+stageId+'</div>';
+                                        stagesHTML += '<div role="img" class="trophy-stage-badge trophy-stage-id-'+stageId+'" title="'+stagesDataById['stage-'+stageId].name+'"></div>';
                                     }
                                 });
 
