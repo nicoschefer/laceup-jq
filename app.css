@@ -234,16 +234,20 @@ table.dataTable .ranking-time.ranking-time-back{
     filter: drop-shadow(0px 0px 1px #ffc800);
 
 }
-.achieved-badge:nth-child(1){
+.achieved-badge:not([style*="display: none"]):nth-child(1){
     z-index: 3000;
 }
-.achieved-badge:nth-child(2){
+.achieved-badge:not([style*="display: none"]):nth-child(2){
     left: 25%;
     z-index: 2000;
 }
-.achieved-badge:nth-child(3){
+.achieved-badge:not([style*="display: none"]):nth-child(3){
     left: 50%;
     z-index: 1000;
+}
+.achieved-badge:not([style*="display: none"]):nth-child(4){
+    left: 75%;
+    z-index: 800;
 }
 
 .achieved-badge-passive{
