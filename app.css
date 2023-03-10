@@ -261,6 +261,9 @@ table.dataTable .ranking-time.ranking-time-back{
 .achieved-badge.bee{
     background-image: url("https://nicoschefer.github.io/laceup-jq/img/badge-bee.svg");
 }
+.achieved-badge.completion {
+    display: none;
+}
 /* ------------------------------------------------------------ */
 
 /* ------------------------------------------------------------ */

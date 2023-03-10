@@ -1066,6 +1066,10 @@ var _rollbarConfig = {
 
                                 var athBadges = extractBadges(val.athlete.badges);
                                 var badgesHtml = '';
+
+                                //Possible completion batch to show how many / if all completed
+                                badgesHtml += '<div class="achieved-badge completion completed-n-'+val.data.distinct_stage_ids.length+'"></div>';
+
                                 $.each(availableBadges, function(key, thisBadge ) {
 
                                     var isPassive = athBadges.includes(thisBadge) ? '' : 'achieved-badge-passive';
