@@ -52,6 +52,10 @@ var _rollbarConfig = {
             'de' : 'Unterstützer',
             'en' : 'Supporter'
         },
+        'sex': {
+            'de' : 'Geschlecht',
+            'en' : 'Gender'
+        },
         'xxx': {
             'de' : 'xxx',
             'en' : 'xxx'
@@ -371,7 +375,7 @@ var _rollbarConfig = {
                         $(htmlScaffold).find('.recent-profile').html(
                             '<div class="profile-img" style="background-image: url('+val.node.athlete.profile+');">' +
                                 (val.node.athlete.paid ?
-                                    '<a title="Unterstützer" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></a>' :
+                                    '<a title="'+translate('supporter')+'" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></a>' :
                                     '')+
                             '</div>'
                         );
@@ -636,7 +640,7 @@ var _rollbarConfig = {
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
                                             '<div class="profile-img" style="background-image: url('+data+');">'+
                                                 (row.athlete.paid ?
-                                                    ('<a class="ranking-paid-badge" title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>') :
+                                                    ('<a class="ranking-paid-badge" title="'+translate('supporter')+'" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>') :
                                                     '')+
                                             '</div>'+
                                         '</div>';
@@ -721,7 +725,7 @@ var _rollbarConfig = {
 
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
                                             '<div class="profile-img" style="background-image: url('+data+');">'+
-                                                (row.athlete.paid ? '<a title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>' : '')+
+                                                (row.athlete.paid ? '<a title="'+translate('supporter')+'" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>' : '')+
                                             '</div>'+
                                         '</div>';
 
@@ -973,7 +977,7 @@ var _rollbarConfig = {
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
                                     '<div class="profile-img" style="background-image: url('+data+');">'+
                                     (row.athlete.paid ?
-                                        ('<a class="ranking-paid-badge" title="Unterstützer" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>') :
+                                        ('<a class="ranking-paid-badge" title="'+translate('supporter')+'" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>') :
                                         '')+
                                     '</div>'+
                                     '</div>';
@@ -1194,6 +1198,88 @@ var _rollbarConfig = {
             this.loadContent();
 
         }
+
+        return this;
+
+    };
+
+    $.fn.laceUpStarter = function(options) {
+
+        var settings = $.extend({
+            mainSelector: '.laceup-starter',
+            paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
+        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
+
+
+        this.loadContent = function() {
+
+            var apiURL = settings.appUrl+"/api/athletes.json?tour.slug="+settings.slug+"&pagination=false"+"&sex="+$(settings).data('sex');
+
+            console.log(apiURL);
+
+            $(settings.mainSelector).DataTable({
+                "retrieve": true,
+                "ajax": {
+                    url: apiURL,
+                    dataSrc: ""
+                },
+                "processing": true,
+                "conditionalPaging": true,
+                "lengthMenu": [[100, -1], [100, "Alle Resultate"]],
+                "ordering": true,
+                order: [[1, 'asc']], //Default ordering (colIndex)
+                "searching": false,
+                "info": false,
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json",
+                    "emptyTable": "Noch keine Resultate"
+                },
+                "columns": [
+                    {
+                        "title": "",
+                        "data": "profile",
+                        "render": function(data, type, row) {
+
+                            return '<div class="ranking-profile '+(row.paid ? 'ranking-profile-paid' : '')+'">'+
+                                '<div class="profile-img" style="background-image: url('+data+');">'+
+                                (row.paid ?
+                                    ('<a class="ranking-paid-badge" title="'+translate('supporter')+'" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></a>') :
+                                    '')+
+                                '</div>'+
+                                '</div>';
+                        }
+                    },
+                    {
+                        "title": "Name",
+                        "data": "name",
+                        "render": function(name, type, row) {
+                            return '<a style="text-decoration: none;" href="'+row.oauth_link+'" target="_blank">'+name+'</a>';
+                        }
+                    },
+                    {
+                        "title": translate('sex'),
+                        "data": "sex",
+                        "render": function(sex, type, row) {
+                            return sex;
+                        }
+                    }
+                ],
+                columnDefs: [
+                    { targets: 0, width: '20%' },
+                    { targets: 1, width: '60%' },
+                    { targets: 2, width: '20%' }
+                ]
+            }).on('page.dt', function() { //on pagination click, scroll to top of the table
+                $('html, body').animate({
+                    scrollTop: $(el).offset().top
+                }, 'fast');
+            });
+
+            return this;
+
+        };
+
+        this.loadContent();
 
         return this;
 
