@@ -853,7 +853,8 @@ var _rollbarConfig = {
                             "title": translate('athlete.name'),
                             "data": "athlete.name",
                             "render": function(name, type, row) {
-                                return '<a style="text-decoration: none;" href="'+row.athlete.oauth_link+'" target="_blank">'+name+'</a>';
+                                return '<a style="text-decoration: none;" href="'+row.athlete.oauth_link+'" target="_blank">'+name+'</a>' +
+                                    (row.athlete.paid ? '<img class="paid-badge-inline" src="'+eleSettings.paidBadgeURL+'">' : '');
                             }
                         },
                         {
@@ -898,12 +899,12 @@ var _rollbarConfig = {
                         }
                     ],
                     columnDefs: [
-                        { responsivePriority: 1, targets: 0, width: '5%' }, // rank
-                        { responsivePriority: 2, targets: 1, width: '10%' }, // profile
-                        { responsivePriority: 3, targets: 2, width: '50%' }, // name
+                        { responsivePriority: 1, targets: 0, width: '10%' }, // rank
+                        { responsivePriority: 4, targets: 1, width: '10%' }, // profile
+                        { responsivePriority: 1, targets: 2, width: '70%' }, // name
                         { responsivePriority: 6, targets: 3, width: '5%' }, // stages
-                        { responsivePriority: 7, targets: 4, width: '10%' }, // badges
-                        { responsivePriority: 4, targets: 5, className: 'dt-body-right', width: '10%' }, // time
+                        { responsivePriority: 2, targets: 4, width: '10%' }, // badges
+                        { responsivePriority: 1, targets: 5, className: 'dt-body-right', width: '10%' }, // time
                         { responsivePriority: 5, targets: 6, className: 'dt-body-right', width: '10%' } // time back
                     ],
                     "drawCallback": function () {

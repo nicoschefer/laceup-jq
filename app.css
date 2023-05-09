@@ -31,8 +31,23 @@
 .recent-profile > .profile-img {
     border:2px solid transparent;
 }
+
+img.paid-badge, img.paid-badge-inline {
+    width: 15px;
+}
+
+img.paid-badge-inline {
+    display: none;
+}
+
+@media screen and (max-width: 450px) {
+    img.paid-badge-inline {
+        margin-left: 5px;
+        display: inline-block;
+    }
+}
+
 .recent-profile img.paid-badge {
-    width: 18px;
     position: absolute;
     top: -10px;
     right: 0;
@@ -165,6 +180,11 @@
 }
 
 /* Overall ranking table ------------------------------------------------------------ */
+
+.laceup-ranking a {
+    display: inline;
+}
+
 table.dataTable.no-footer {
     border-bottom: 0;
 }
@@ -249,6 +269,23 @@ table.dataTable .ranking-time.ranking-time-back{
 .achieved-badge:nth-child(4){
     left: 75%;
     z-index: 800;
+}
+
+@media screen and (max-width: 767px) {
+    .achieved-badge {
+        width: 24px;
+        height: 24px;
+    }
+
+    .achieved-badge:nth-child(2){
+        left: 15%;
+    }
+    .achieved-badge:nth-child(3){
+        left: 30%;
+    }
+    .achieved-badge:nth-child(4){
+        left: 45%;
+    }
 }
 
 .achieved-badge-passive{
