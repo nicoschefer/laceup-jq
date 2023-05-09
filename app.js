@@ -1225,14 +1225,14 @@ var _rollbarConfig = {
                 },
                 "processing": true,
                 "conditionalPaging": true,
-                "lengthMenu": [[100, -1], [100, "Alle Resultate"]],
+                "lengthMenu": [[100, -1], [100, "Alle Teilnehmer"]],
                 "ordering": true,
                 order: [[1, 'asc']], //Default ordering (colIndex)
                 "searching": false,
                 "info": false,
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/German.json",
-                    "emptyTable": "Noch keine Resultate"
+                    "emptyTable": "Noch keine Teilnehmer"
                 },
                 "columns": [
                     {
@@ -1271,7 +1271,7 @@ var _rollbarConfig = {
                 ]
             }).on('page.dt', function() { //on pagination click, scroll to top of the table
                 $('html, body').animate({
-                    scrollTop: $(el).offset().top
+                    scrollTop: $(this).offset().top
                 }, 'fast');
             });
 
