@@ -814,7 +814,7 @@ var _rollbarConfig = {
                 var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
 
                 //Allow overwriting the available badges
-                var availableBadges = (eleSettings.badges !== undefined) ? eleSettings.badges.split(',') : ["bee","bat","hare"];
+                var availableBadges = (eleSettings.badges !== undefined) ? eleSettings.badges.split(',') : ["hare","bat","bee"];
 
                 $(el).DataTable({
                     "retrieve": true,
