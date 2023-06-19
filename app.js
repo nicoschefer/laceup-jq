@@ -1,3 +1,4 @@
+$.fn.dataTable.ext.errMode = 'throw';
 var _rollbarConfig = {
     accessToken: "070cd219446743a18dbdede83b4263bd",
     captureUncaught: true,
