@@ -166,7 +166,8 @@ var _rollbarConfig = {
                 if(data.paid){
 
                     //same URL if connect
-                    $(this).text($(this).data('text-profile')); //set the profile text, eg. "Mein Profil"
+                    $(this).text($(this).data('text-profile')) //set the profile text, eg. "Mein Profil"
+                        .attr('href',settings.appUrl+'/tour/'+settings.slug+'/profile'); //set the support url
 
                 }
                 else{
