@@ -375,7 +375,7 @@ var _rollbarConfig = {
                         }
 
                         $(htmlScaffold).find('.recent-profile').html(
-                            '<div class="profile-img" style="background-image: url('+val.node.athlete.profile+');">' +
+                            '<div class="profile-img" style="background-image: url('+val.node.athlete.profile+'), url("https://static.laceup.ch/backgrounds/Running1.jpg");">' +
                                 (val.node.athlete.paid ?
                                     '<a title="'+translate('supporter')+'" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></a>' :
                                     '')+
@@ -640,7 +640,7 @@ var _rollbarConfig = {
                             "render": function(data, type, row) {
 
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
-                                            '<div class="profile-img" style="background-image: url('+data+');">'+
+                                            '<div class="profile-img" style="background-image: url('+data+'), url("https://static.laceup.ch/backgrounds/Running1.jpg");">'+
                                                 (row.athlete.paid ?
                                                     ('<a class="ranking-paid-badge" title="'+translate('supporter')+'" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>') :
                                                     '')+
@@ -726,7 +726,7 @@ var _rollbarConfig = {
                             "render": function(data, type, row) {
 
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
-                                            '<div class="profile-img" style="background-image: url('+data+');">'+
+                                            '<div class="profile-img" style="background-image: url('+data+'), url("https://static.laceup.ch/backgrounds/Running1.jpg");">'+
                                                 (row.athlete.paid ? '<a title="'+translate('supporter')+'" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>' : '')+
                                             '</div>'+
                                         '</div>';
@@ -844,7 +844,7 @@ var _rollbarConfig = {
                             "render": function(data, type, row) {
 
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
-                                    '<div class="profile-img" style="background-image: url('+data+');">'+
+                                    '<div class="profile-img" style="background-image: url('+data+'), url("https://static.laceup.ch/backgrounds/Running1.jpg");">'+
                                     (row.athlete.paid ? '<a title="'+translate('supporter')+'" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>' : '')+
                                     '</div>'+
                                     '</div>';
@@ -978,7 +978,7 @@ var _rollbarConfig = {
                             "render": function(data, type, row) {
 
                                 return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
-                                    '<div class="profile-img" style="background-image: url('+data+');">'+
+                                    '<div class="profile-img" style="background-image: url('+data+'), url("https://static.laceup.ch/backgrounds/Running1.jpg");">'+
                                     (row.athlete.paid ?
                                         ('<a class="ranking-paid-badge" title="'+translate('supporter')+'" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>') :
                                         '')+
@@ -1244,7 +1244,7 @@ var _rollbarConfig = {
                         "render": function(data, type, row) {
 
                             return '<div class="ranking-profile '+(row.paid ? 'ranking-profile-paid' : '')+'">'+
-                                '<div class="profile-img" style="background-image: url('+data+');">'+
+                                '<div class="profile-img" style="background-image: url('+data+'), url("https://static.laceup.ch/backgrounds/Running1.jpg");">'+
                                 (row.paid ?
                                     ('<a class="ranking-paid-badge" title="'+translate('supporter')+'" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></a>') :
                                     '')+
