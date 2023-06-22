@@ -67,7 +67,6 @@ img.paid-badge-inline {
 .result-time, .recent-time{
     font-family: monospace;
     opacity: 0.85;
-    font-size: 0.95em;
 }
 .result-rank > div {
     height: 25px;
@@ -197,7 +196,6 @@ table.dataTable tfoot th {
 
 table.dataTable .ranking-time{
     font-family: monospace;
-    font-size: 0.9em;
 }
 
 table.dataTable .ranking-time.ranking-time-back{
