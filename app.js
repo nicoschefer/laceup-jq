@@ -816,7 +816,7 @@ var _rollbarConfig = {
                 var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
 
                 //Allow overwriting the available badges
-                var availableBadges = (eleSettings.badges !== undefined) ? eleSettings.badges.split(',') : ["hare","bat","bee"];
+                var availableBadges = (eleSettings.badges !== undefined) ? eleSettings.badges.split(',').filter(element => element) : ["hare","bat","bee"];
 
                 $(el).DataTable({
                     "retrieve": true,
@@ -1052,7 +1052,7 @@ var _rollbarConfig = {
                     var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
 
                     //Allow overwriting the available badges
-                    var availableBadges = (eleSettings.badges !== undefined) ? eleSettings.badges.split(',') : ["bee","bat","hare"];
+                    var availableBadges = (eleSettings.badges !== undefined) ? eleSettings.badges.split(',').filter(element => element) : ["bee","bat","hare"];
 
                     var apiURL = eleSettings.appUrl + "/api/trophies.json?tour.slug="+eleSettings.slug+"&type=stage_completion&sex="+eleSettings.sex+"&"+(eleSettings.limit?'itemsPerPage='+eleSettings.limit:'pagination=false');
 
