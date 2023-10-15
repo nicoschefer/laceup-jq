@@ -63,19 +63,6 @@ var _rollbarConfig = {
         }
     };
 
-    let searchParams = new URLSearchParams(window.location.search)
-    let token = searchParams.get('jwt')
-    if (token) {
-        Cookies.set("jwt", token);
-    }
-
-    let token = Cookies.get('jwt');
-    if (token) {
-        $.ajaxSetup({
-            headers: { 'Authorization': 'Bearer '+token }
-        });
-    }
-
     let translate = function(node) {
 
         if (node in translations){
