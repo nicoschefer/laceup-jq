@@ -1258,19 +1258,11 @@ var _rollbarConfig = {
                         "render": function(name, type, row) {
                             return '<a style="text-decoration: none;" href="'+row.oauth_link+'" target="_blank">'+name+'</a>';
                         }
-                    },
-                    {
-                        "title": translate('sex'),
-                        "data": "sex",
-                        "render": function(sex, type, row) {
-                            return sex;
-                        }
                     }
                 ],
                 columnDefs: [
                     { targets: 0, width: '20%' },
-                    { targets: 1, width: '60%' },
-                    { targets: 2, width: '20%' }
+                    { targets: 1, width: '80%' },
                 ]
             }).on('page.dt', function() { //on pagination click, scroll to top of the table
                 $('html, body').animate({
