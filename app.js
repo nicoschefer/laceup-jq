@@ -466,9 +466,6 @@ var _rollbarConfig = {
                                       name
                                       paid
                                     }
-                                    tour {
-                                       mode
-                                    }
                                   }
                                 }
                               }
@@ -487,13 +484,11 @@ var _rollbarConfig = {
                                 lag = "+" + ranking.time_to_first_formatted;
                             }
 
-                            var numberOfStage = (ranking.tour.mode ==='enduro') ? '' : '<br><small class="paragraph-light paragraph-small">'+ranking.number_of_stages+' Etappe(n)</small>';
-
                             var itemHTML = '<div class="result-item result-rank-'+ranking.rank+'">'+
                                 '<div class="result-rank '+(ranking.athlete.paid ? 'result-rank-paid' : '')+'"><div>'+ranking.rank+'</div></div>'+
                                 '<div class="result-name truncate">'+
                                 ranking.athlete.name+
-                                numberOfStage+
+                                '<br><small class="paragraph-light paragraph-small">'+ranking.number_of_stages+' Etappe(n)</small>'+
                                 '</div>'+
                                 '<div class="result-time">'+
                                 ranking.ranking_time+
