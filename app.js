@@ -614,7 +614,7 @@ var _rollbarConfig = {
                 $(el).DataTable({
                     "retrieve": true,
                     "ajax": {
-                        url: eleSettings.appUrl+"/api/rankings?stage.id="+$(el).data('stageid')+"&sex="+$(el).data('sex')+"&pagination=false",
+                        url: eleSettings.appUrl+"/api/rankings?stage.id="+$(el).data('stageid')+"&sex="+$(el).data('sex'),
                         dataSrc: ""
                     },
                     "processing": true,
