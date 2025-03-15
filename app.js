@@ -196,6 +196,16 @@
                     withCredentials: true
                 },
                 statusCode: {
+                    401: function() { //unauthorized - not logged in
+
+                        console.log("me.json unauthorized - not logged in");
+
+                        $('.laceup-show-if-paid-user').hide();
+                        $('.laceup-show-if-free-user').hide();
+                        $('.laceup-show-if-known-user').hide();
+                        $('.laceup-show-if-unknown-user').show();
+
+                    },
                     403: function() { //forbidden - not logged in
 
                         console.log("me.json forbidden - not logged in");
