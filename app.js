@@ -1148,7 +1148,7 @@
         var settings = $.extend({
             mainSelector: '#laceup-supporter',
             refreshSeconds: 480,
-            limit: 100
+            limit: 1000
         }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
 
         $.extend(settings, $(settings.mainSelector).data()); //check the mainSelector data attribute for further settings
