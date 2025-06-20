@@ -606,85 +606,104 @@
 
 
 
-    $.fn.laceUpStageRanking = function(options) {
+    $.fn.laceUpStageRanking = function (options) {
 
-        var settings = $.extend({
+        const settings = $.extend({
             mainSelector: '.laceup-stageranking',
-            paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
-        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
+            paidBadgeURL: 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
+        }, this.data(), options);
 
+        this.loadContent = function () {
 
-        this.loadContent = function() {
+            $(settings.mainSelector + ':not([data-stageid=""])').each(function (_, el) {
 
-            $(settings.mainSelector+':not([data-stageid=""])').each(function(index, el) {
+                const eleSettings = $.extend({}, settings, $(el).data());
+                const itemsPerPage = 50;
 
-                var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
+                const baseURL =
+                    `${eleSettings.appUrl}/api/rankings`
+                    + `?stage.id=${$(el).data('stageid')}`
+                    + `&sex=${$(el).data('sex')}`
+                    + `&itemsPerPage=${itemsPerPage}`;
 
-                $(el).DataTable({
-                    "retrieve": true,
-                    "ajax": {
-                        url: eleSettings.appUrl+"/api/rankings?stage.id="+$(el).data('stageid')+"&sex="+$(el).data('sex'),
-                        dataSrc: ""
-                    },
-                    "processing": true,
-                    "conditionalPaging": true,
-                    "lengthMenu": [[100, -1], [100, translate('show_all_results')]],
-                    "ordering": false,
-                    "searching": false,
-                    "info": false,
-                    "columns": [
-                        { "title": "Rang", "data": "rank" },
-                        {
-                            "title": "",
-                            "data": "athlete.profile",
-                            "render": function(data, type, row) {
-
-                                return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
-                                            '<div class="profile-img" style="background-image: url('+data+'), url(https://static.laceup.ch/backgrounds/Running1.jpg);">'+
-                                                (row.athlete.paid ?
-                                                    ('<a class="ranking-paid-badge" title="'+translate('supporter')+'" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>') :
-                                                    '')+
-                                            '</div>'+
-                                        '</div>';
+                function fetchPage(page = 1, acc = []) {
+                    return $.getJSON(`${baseURL}&page=${page}`).then(res => {
+                        if (Array.isArray(res) && res.length) {
+                            acc.push(...res);
+                            if (res.length === itemsPerPage) {
+                                return fetchPage(page + 1, acc);
                             }
-                        },
-                        {
-                            "title": "Name",
-                            "data": "athlete.name",
-                            "render": function(name, type, row) {
-                                return '<a style="text-decoration: none;" href="'+row.athlete.oauth_link+'" target="_blank">'+name+'</a>';
+                        }
+                        return acc;
+                    });
+                }
+
+                fetchPage().then(fullData => {
+
+                    $(el).DataTable({
+                        retrieve: true,
+                        data: fullData, // <- full list of results
+                        processing: true,
+                        conditionalPaging: true,
+                        lengthMenu: [[100, -1], [100, translate('show_all_results')]],
+                        ordering: false,
+                        searching: false,
+                        info: false,
+                        columns: [
+                            { title: "Rang", data: "rank" },
+                            {
+                                title: "",
+                                data: "athlete.profile",
+                                render: function (data, type, row) {
+                                    return `<div class="ranking-profile ${(row.athlete.paid ? 'ranking-profile-paid' : '')}">
+                                            <div class="profile-img"
+                                                 style="background-image:url(${data}),url(https://static.laceup.ch/backgrounds/Running1.jpg);">
+                                                 ${row.athlete.paid
+                                        ? `<a class="ranking-paid-badge" title="${translate('supporter')}"
+                                                           href="${eleSettings.appUrl}/tour/${eleSettings.slug}/donate">
+                                                           <img class="paid-badge" src="${eleSettings.paidBadgeURL}">
+                                                       </a>` : ''}
+                                            </div>
+                                        </div>`;
+                                }
+                            },
+                            {
+                                title: "Name",
+                                data: "athlete.name",
+                                render: function (name, type, row) {
+                                    return `<a style="text-decoration: none;" href="${row.athlete.oauth_link}" target="_blank">${name}</a>`;
+                                }
+                            },
+                            {
+                                title: "Zeit",
+                                data: "ranking_time",
+                                render: function (data, type, row) {
+                                    return `<a style="font-family: monospace; text-decoration: none;" target="_blank"
+                                           href="${row.effort.effort_strava_link}">${data}</a>`;
+                                }
                             }
-                        },
-                        {
-                            "title": "Zeit",
-                            "data": "ranking_time",
-                            "render": function(data, type, row) {
-                                return '<a style="font-family: monospace; text-decoration: none;" target="_blank" href="'+row.effort.effort_strava_link+'">'+data+'</a>';
-                            }
-                        },
-                    ],
-                    columnDefs: [
-                        { targets: 0, width: '5%' },
-                        { targets: 1, width: '10%' },
-                        { targets: 2, width: '50%' },
-                        { targets: -1, className: 'dt-body-right', width: '35%' }
-                    ]
-                }).on('page.dt', function() { //on pagination click, scroll to top of the table
-                    $('html, body').animate({
-                        scrollTop: $(el).offset().top
-                    }, 'fast');
-                });
+                        ],
+                        columnDefs: [
+                            { targets: 0, width: '5%' },
+                            { targets: 1, width: '10%' },
+                            { targets: 2, width: '50%' },
+                            { targets: -1, className: 'dt-body-right', width: '35%' }
+                        ]
+                    }).on('page.dt', function () {
+                        $('html, body').animate({
+                            scrollTop: $(el).offset().top
+                        }, 'fast');
+                    });
+
+                }).fail(err => console.error('Ranking fetch failed:', err));
             });
 
             return this;
-
         };
 
-        this.loadContent();
-
-        return this;
-
+        return this.loadContent();
     };
+
 
 
     $.fn.laceUpOverallRanking = function(options) {
