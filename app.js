@@ -632,10 +632,6 @@
                     "ordering": false,
                     "searching": false,
                     "info": false,
-                    "language": {
-                        "url": "https://cdn.datatables.net/plug-ins/2.3.2/i18n/de-DE.js",
-                        "emptyTable": "Noch keine Resultate"
-                    },
                     "columns": [
                         { "title": "Rang", "data": "rank" },
                         {
