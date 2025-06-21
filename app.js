@@ -706,324 +706,64 @@
 
 
 
-    $.fn.laceUpOverallRanking = function(options) {
-
-        var settings = $.extend({
-            mainSelector: '.laceup-ranking',
-            paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
-        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
-
-        this.loadContent = function() {
-
-            $(settings.mainSelector).each(function(index, el) {
-
-                var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
-
-                $(el).DataTable({
-                    "retrieve": true,
-                    "ajax": {
-                        url: eleSettings.appUrl+"/api/overall_rankings?tour.slug="+eleSettings.slug+"&sex="+$(el).data('sex')+"&pagination=false",
-                        dataSrc: ""
-                    },
-                    "processing": true,
-                    "paging": false,
-                    "ordering": false,
-                    "searching": false,
-                    "info": false,
-                    "responsive": true,
-                    "language": {
-                        "emptyTable": translate('no_results')
-                    },
-                    "columns": [
-                        {
-                            "title": "",
-                            "data": "rank"
-                        },
-                        {
-                            "title": "",
-                            "data": "athlete.profile",
-                            "render": function(data, type, row) {
-
-                                return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
-                                            '<div class="profile-img" style="background-image: url('+data+'), url(https://static.laceup.ch/backgrounds/Running1.jpg);">'+
-                                                (row.athlete.paid ? '<a title="'+translate('supporter')+'" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>' : '')+
-                                            '</div>'+
-                                        '</div>';
-
-                            }
-                        },
-                        {
-                            "title": "Name",
-                            "data": "athlete.name",
-                            "render": function(name, type, row) {
-                                return '<a style="text-decoration: none;" href="'+row.athlete.oauth_link+'" target="_blank">'+name+'</a>';
-                            }
-                        },
-                        {
-                            "title": "Etappen",
-                            "data": "number_of_stages"
-                        },
-                        {
-                            "title": "Zeit",
-                            "data": "ranking_time",
-                            "render": function(data, type, row) {
-                                return '<span class="ranking-time">'+data+'</span>';
-                            }
-                        },
-                        {
-                            "title": "Rückstand",
-                            "render": function(data, type, row) {
-                                var lag = "";
-                                if (row.rank > 1 && row.stage_lag === 0) {
-                                    lag = row.time_to_first_formatted;
-                                }
-                                return '<span class="ranking-time ranking-time-back">'+lag+'</span>'; //maybe add some formatting?
-                            }
-                        }
-                    ],
-                    columnDefs: [
-                        { responsivePriority: 1, targets: 0, width: '5%' }, // rank
-                        { responsivePriority: 2, targets: 1, width: '10%' }, // profile
-                        { responsivePriority: 3, targets: 2, width: '60%' }, // name
-                        { responsivePriority: 6, targets: 3, width: '5%' }, // stages
-                        { responsivePriority: 4, targets: 4, className: 'dt-body-right', width: '10%' }, // time
-                        { responsivePriority: 5, targets: 5, className: 'dt-body-right', width: '10%' } // time back
-                    ],
-                    "drawCallback": function () {
-                        var api = this.api();
-                        var rows = api.rows( {page: 'current'} ).nodes();
-                        var last = null;
-                        api.column(3, {page: 'current'} ).data().each( function ( group, i ) {
-                            if ( last !== group ) {
-                                $(rows).eq( i ).before(
-                                    '<tr style="text-align: center;"><td colspan="6"><small>'+group+' Etappe(n)</small></td></tr>'
-                                );
-                                last = group;
-                            }
-                        });
-                    }
-                });
-            });
-
-            return this;
-
-        };
-
-
-        this.loadContent();
-
-        return this;
-
-    };
-
-
-    $.fn.laceUpOverallRankingWithBadges = function(options) {
-
-        //bee More than n (5?) efforts
-        //hare: All stages in one day
-        //bat: An effort from dusk till dawn
-
-        var settings = $.extend({
-            mainSelector: '.laceup-ranking',
-            paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
-        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
-
-        this.loadContent = function() {
-
-            $(settings.mainSelector).each(function(index, el) {
-
-                var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
-
-                //Allow overwriting the available badges
-                var availableBadges = (eleSettings.badges !== undefined) ? eleSettings.badges.split(',').filter(element => element) : ["hare","bat","bee"];
-
-                $(el).DataTable({
-                    "retrieve": true,
-                    "ajax": {
-                        url: eleSettings.appUrl+"/api/overall_rankings?tour.slug="+eleSettings.slug+"&sex="+$(el).data('sex')+"&pagination=false",
-                        dataSrc: ""
-                    },
-                    "processing": true,
-                    "paging": false,
-                    "ordering": false,
-                    "searching": false,
-                    "info": false,
-                    "responsive": true,
-                    "language": {
-                        "emptyTable": translate('no_results')
-                    },
-                    "columns": [
-                        {
-                            "title": "",
-                            "data": "rank"
-                        },
-                        {
-                            "title": "",
-                            "data": "athlete.profile",
-                            "render": function(data, type, row) {
-
-                                return '<div class="ranking-profile '+(row.athlete.paid ? 'ranking-profile-paid' : '')+'">'+
-                                    '<div class="profile-img" style="background-image: url('+data+'), url(https://static.laceup.ch/backgrounds/Running1.jpg);">'+
-                                    (row.athlete.paid ? '<a title="'+translate('supporter')+'" href="'+eleSettings.appUrl+'/tour/'+eleSettings.slug+'/donate"><img class="paid-badge" src="'+eleSettings.paidBadgeURL+'"></a>' : '')+
-                                    '</div>'+
-                                    '</div>';
-
-                            }
-                        },
-                        {
-                            "title": translate('athlete.name'),
-                            "data": "athlete.name",
-                            "render": function(name, type, row) {
-                                return '<a style="text-decoration: none;" href="'+row.athlete.oauth_link+'" target="_blank">'+name+'</a>' +
-                                    (row.athlete.paid ? '<img class="paid-badge-inline" src="'+eleSettings.paidBadgeURL+'">' : '');
-                            }
-                        },
-                        {
-                            "title": translate('number_of_stages'),
-                            "data": "number_of_stages"
-                        },
-                        {
-                            "title": translate('badges'),
-                            "render": function(data, type, row) {
-
-                                var athBadges = extractBadges(row.athlete.badges);
-                                var badgesHtml = '';
-
-                                $.each(availableBadges, function(key, thisBadge ) {
-
-                                    var isPassive = athBadges.includes(thisBadge) ? '' : 'achieved-badge-passive';
-                                    //var isPassive = ((Math.random()*(row.rank/2)) < 1) ? '' : 'achieved-badge-passive';
-
-                                    badgesHtml += '<div class="achieved-badge '+isPassive+' '+thisBadge+'"></div>';
-
-                                });
-
-                                return '<div class="badge-container">'+badgesHtml+'</div>';
-                            }
-                        },
-                        {
-                            "title": translate('ranking_time'),
-                            "data": "ranking_time",
-                            "render": function(data, type, row) {
-                                return '<span class="ranking-time">'+data+'</span>';
-                            }
-                        },
-                        {
-                            "title": translate('time_back'),
-                            "render": function(data, type, row) {
-                                var lag = "";
-                                if (row.rank > 1 && row.stage_lag === 0) {
-                                    lag = row.time_to_first_formatted;
-                                }
-                                return '<span class="ranking-time ranking-time-back">'+lag+'</span>'; //maybe add some formatting?
-                            }
-                        }
-                    ],
-                    columnDefs: [
-                        { responsivePriority: 1, targets: 0, width: '10%' }, // rank
-                        { responsivePriority: 4, targets: 1, width: '10%' }, // profile
-                        { responsivePriority: 1, targets: 2, width: '70%' }, // name
-                        { responsivePriority: 6, targets: 3, width: '5%' }, // stages
-                        { responsivePriority: 2, targets: 4, width: '10%' }, // badges
-                        { responsivePriority: 1, targets: 5, className: 'dt-body-right', width: '10%' }, // time
-                        { responsivePriority: 5, targets: 6, className: 'dt-body-right', width: '10%' } // time back
-                    ],
-                    "drawCallback": function () {
-                        var api = this.api();
-                        var rows = api.rows( {page: 'current'} ).nodes();
-                        var last = null;
-                        api.column(3, {page: 'current'} ).data().each( function ( group, i ) {
-                            if ( last !== group ) {
-                                $(rows).eq( i ).before(
-                                    '<tr style="text-align: center;"><td colspan="7"><small>'+group+' '+translate('n_stages')+'</small></td></tr>'
-                                );
-                                last = group;
-                            }
-                        });
-                    }
-                });
-            });
-
-            return this;
-
-        };
-
-
-        this.loadContent();
-
-        return this;
-
-    };
-
-
-    /**
-     * jQuery plug-in: laceUpStageTrophy
-     * – now loads *all* pages before initialising DataTables
-     *   (keeps requesting ...&page=N&itemsPerPage=50 until <50 rows are returned)
-     */
-    $.fn.laceUpStageTrophy = function (options) {
+    $.fn.laceUpOverallRanking = function (options) {
 
         const settings = $.extend({
-            mainSelector: '.laceup-trophy-stage',
+            mainSelector: '.laceup-ranking',
             paidBadgeURL: 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
         }, this.data(), options);
 
-        /* --------------------------------------------------------- */
         this.loadContent = function () {
 
-            $(settings.mainSelector + ':not([data-stageid=""])').each(function (_, el) {
+            $(settings.mainSelector).each(function (_, el) {
 
                 const eleSettings = $.extend({}, settings, $(el).data());
                 const itemsPerPage = 50;
 
-                // base part of the API – only the page number changes
                 const baseURL =
-                    `${eleSettings.appUrl}/api/rankings`
-                    + `?stage.id=${$(el).data('stageid')}`
-                    + `&sex=${$(el).data('sex')}`
+                    `${eleSettings.appUrl}/api/overall_rankings`
+                    + `?tour.slug=${eleSettings.slug}`
+                    + `&sex=${$(el).data('sex') || ''}`
                     + `&itemsPerPage=${itemsPerPage}`;
 
-                /* -------- recursive loader ---------------------------------- */
                 function fetchPage(page = 1, acc = []) {
                     return $.getJSON(`${baseURL}&page=${page}`).then(res => {
                         if (Array.isArray(res) && res.length) {
                             acc.push(...res);
-                            // another page is *possible* only when results == itemsPerPage
                             if (res.length === itemsPerPage) {
                                 return fetchPage(page + 1, acc);
                             }
                         }
-                        return acc; // either ran out of rows or received empty page
+                        return acc;
                     });
                 }
 
-                /* -------- grab everything, then initialise DataTable -------- */
                 fetchPage().then(fullData => {
 
                     $(el).DataTable({
                         retrieve: true,
-                        data: fullData,          // <-- was "ajax" before
+                        data: fullData,
                         processing: true,
-                        conditionalPaging: true,
-                        lengthMenu: [[100, -1], [100, translate('show_all_results')]],
+                        paging: false,
                         ordering: false,
                         searching: false,
                         info: false,
+                        responsive: true,
                         language: {
-                            "emptyTable": translate('no_results')
+                            emptyTable: translate('no_results')
                         },
                         columns: [
+                            { title: "", data: "rank" },
                             {
                                 title: "",
                                 data: "athlete.profile",
                                 render: function (data, type, row) {
-                                    return `<div class="ranking-profile ${(row.athlete.paid ? 'ranking-profile-paid' : '')}">
+                                    return `<div class="ranking-profile ${row.athlete.paid ? 'ranking-profile-paid' : ''}">
                                             <div class="profile-img"
-                                                 style="background-image:url(${data}),url(https://static.laceup.ch/backgrounds/Running1.jpg);">
-                                                 ${row.athlete.paid
-                                        ? `<a class="ranking-paid-badge" title="${translate('supporter')}"
-                                                           href="${eleSettings.appUrl}/tour/${eleSettings.slug}/donate">
-                                                           <img class="paid-badge" src="${eleSettings.paidBadgeURL}">
+                                                 style="background-image: url(${data}), url(https://static.laceup.ch/backgrounds/Running1.jpg);">
+                                                ${row.athlete.paid
+                                        ? `<a title="${translate('supporter')}" href="${eleSettings.appUrl}/tour/${eleSettings.slug}/donate">
+                                                        <img class="paid-badge" src="${eleSettings.paidBadgeURL}">
                                                        </a>` : ''}
                                             </div>
                                         </div>`;
@@ -1032,30 +772,353 @@
                             {
                                 title: "Name",
                                 data: "athlete.name",
-                                render: (name, type, row) =>
-                                    `<a style="text-decoration:none;" href="${row.athlete.oauth_link}" target="_blank">${name}</a>`
+                                render: function (name, type, row) {
+                                    return `<a style="text-decoration: none;" href="${row.athlete.oauth_link}" target="_blank">${name}</a>`;
+                                }
                             },
                             {
-                                title: "Datum",
-                                data: "effort.start_date",
-                                render: (d, type, row) =>
-                                    `<a style="font-family:monospace;text-decoration:none;" target="_blank"
-                                     href="${row.effort.effort_strava_link}">
-                                     ${new Date(d).toLocaleDateString('de-CH')}
-                                 </a>`
+                                title: "Etappen",
+                                data: "number_of_stages"
+                            },
+                            {
+                                title: "Zeit",
+                                data: "ranking_time",
+                                render: data => `<span class="ranking-time">${data}</span>`
+                            },
+                            {
+                                title: "Rückstand",
+                                render: function (_, type, row) {
+                                    let lag = "";
+                                    if (row.rank > 1 && row.stage_lag === 0) {
+                                        lag = row.time_to_first_formatted;
+                                    }
+                                    return `<span class="ranking-time ranking-time-back">${lag}</span>`;
+                                }
                             }
                         ],
                         columnDefs: [
-                            { targets: 0, width: '10%' },
-                            { targets: 1, width: '45%' },
-                            { targets: 2, className: 'dt-body-right', width: '45%' }
-                        ]
-                    }).on('page.dt', function () {
-                        $('html, body').animate({ scrollTop: $(el).offset().top }, 'fast');
+                            { responsivePriority: 1, targets: 0, width: '5%' },
+                            { responsivePriority: 2, targets: 1, width: '10%' },
+                            { responsivePriority: 3, targets: 2, width: '60%' },
+                            { responsivePriority: 6, targets: 3, width: '5%' },
+                            { responsivePriority: 4, targets: 4, className: 'dt-body-right', width: '10%' },
+                            { responsivePriority: 5, targets: 5, className: 'dt-body-right', width: '10%' }
+                        ],
+                        drawCallback: function () {
+                            const api = this.api();
+                            const rows = api.rows({ page: 'current' }).nodes();
+                            let last = null;
+                            api.column(3, { page: 'current' }).data().each(function (group, i) {
+                                if (last !== group) {
+                                    $(rows).eq(i).before(
+                                        `<tr style="text-align: center;"><td colspan="6"><small>${group} Etappe(n)</small></td></tr>`
+                                    );
+                                    last = group;
+                                }
+                            });
+                        }
                     });
 
-                }).fail(err => console.error('Rankings fetch failed:', err));
+                }).fail(err => console.error('Overall ranking fetch failed:', err));
             });
+
+            return this;
+        };
+
+        return this.loadContent();
+    };
+
+
+    $.fn.laceUpOverallRankingWithBadges = function (options) {
+
+        const settings = $.extend({
+            mainSelector: '.laceup-ranking',
+            paidBadgeURL: 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
+        }, this.data(), options);
+
+        this.loadContent = function () {
+
+            $(settings.mainSelector).each(function (_, el) {
+
+                const eleSettings = $.extend({}, settings, $(el).data());
+                const itemsPerPage = 50;
+
+                const baseURL =
+                    `${eleSettings.appUrl}/api/overall_rankings`
+                    + `?tour.slug=${eleSettings.slug}`
+                    + `&sex=${$(el).data('sex') || ''}`
+                    + `&itemsPerPage=${itemsPerPage}`;
+
+                const availableBadges = (eleSettings.badges !== undefined)
+                    ? eleSettings.badges.split(',').filter(Boolean)
+                    : ["hare", "bat", "bee"];
+
+                function fetchPage(page = 1, acc = []) {
+                    return $.getJSON(`${baseURL}&page=${page}`).then(res => {
+                        if (Array.isArray(res) && res.length) {
+                            acc.push(...res);
+                            if (res.length === itemsPerPage) {
+                                return fetchPage(page + 1, acc);
+                            }
+                        }
+                        return acc;
+                    });
+                }
+
+                fetchPage().then(fullData => {
+
+                    $(el).DataTable({
+                        retrieve: true,
+                        data: fullData,
+                        processing: true,
+                        paging: false,
+                        ordering: false,
+                        searching: false,
+                        info: false,
+                        responsive: true,
+                        language: {
+                            emptyTable: translate('no_results')
+                        },
+                        columns: [
+                            { title: "", data: "rank" },
+                            {
+                                title: "",
+                                data: "athlete.profile",
+                                render: function (data, type, row) {
+                                    return `<div class="ranking-profile ${(row.athlete.paid ? 'ranking-profile-paid' : '')}">
+                                            <div class="profile-img"
+                                                 style="background-image: url(${data}), url(https://static.laceup.ch/backgrounds/Running1.jpg);">
+                                                ${row.athlete.paid
+                                        ? `<a title="${translate('supporter')}" href="${eleSettings.appUrl}/tour/${eleSettings.slug}/donate">
+                                                            <img class="paid-badge" src="${eleSettings.paidBadgeURL}">
+                                                       </a>`
+                                        : ''}
+                                            </div>
+                                        </div>`;
+                                }
+                            },
+                            {
+                                title: translate('athlete.name'),
+                                data: "athlete.name",
+                                render: function (name, type, row) {
+                                    return `<a style="text-decoration: none;" href="${row.athlete.oauth_link}" target="_blank">${name}</a>`
+                                        + (row.athlete.paid
+                                            ? `<img class="paid-badge-inline" src="${eleSettings.paidBadgeURL}">`
+                                            : '');
+                                }
+                            },
+                            {
+                                title: translate('number_of_stages'),
+                                data: "number_of_stages"
+                            },
+                            {
+                                title: translate('badges'),
+                                render: function (_, type, row) {
+                                    const athBadges = extractBadges(row.athlete.badges || []);
+                                    return `<div class="badge-container">` +
+                                        availableBadges.map(badge =>
+                                            `<div class="achieved-badge ${athBadges.includes(badge) ? '' : 'achieved-badge-passive'} ${badge}"></div>`
+                                        ).join('') +
+                                        `</div>`;
+                                }
+                            },
+                            {
+                                title: translate('ranking_time'),
+                                data: "ranking_time",
+                                render: data => `<span class="ranking-time">${data}</span>`
+                            },
+                            {
+                                title: translate('time_back'),
+                                render: function (_, type, row) {
+                                    let lag = "";
+                                    if (row.rank > 1 && row.stage_lag === 0) {
+                                        lag = row.time_to_first_formatted;
+                                    }
+                                    return `<span class="ranking-time ranking-time-back">${lag}</span>`;
+                                }
+                            }
+                        ],
+                        columnDefs: [
+                            { responsivePriority: 1, targets: 0, width: '10%' },
+                            { responsivePriority: 4, targets: 1, width: '10%' },
+                            { responsivePriority: 1, targets: 2, width: '70%' },
+                            { responsivePriority: 6, targets: 3, width: '5%' },
+                            { responsivePriority: 2, targets: 4, width: '10%' },
+                            { responsivePriority: 1, targets: 5, className: 'dt-body-right', width: '10%' },
+                            { responsivePriority: 5, targets: 6, className: 'dt-body-right', width: '10%' }
+                        ],
+                        drawCallback: function () {
+                            const api = this.api();
+                            const rows = api.rows({ page: 'current' }).nodes();
+                            let last = null;
+                            api.column(3, { page: 'current' }).data().each(function (group, i) {
+                                if (last !== group) {
+                                    $(rows).eq(i).before(
+                                        `<tr style="text-align: center;"><td colspan="7"><small>${group} ${translate('n_stages')}</small></td></tr>`
+                                    );
+                                    last = group;
+                                }
+                            });
+                        }
+                    });
+
+                }).fail(err => console.error('Overall ranking fetch failed:', err));
+            });
+
+            return this;
+        };
+
+        return this.loadContent();
+    };
+
+
+    $.fn.laceUpSupporter = function (options) {
+
+        const settings = $.extend({
+            mainSelector: '#laceup-supporter',
+            refreshSeconds: 480,
+            limit: 1000
+        }, this.data(), options);
+
+        $.extend(settings, $(settings.mainSelector).data());
+
+        this.loadContent = function () {
+
+            const itemsPerPage = 50;
+            const baseURL = `${settings.appUrl}/api/athletes.json?tour.slug=${settings.slug}&paid=true&itemsPerPage=${itemsPerPage}`;
+
+            const blockedIds = [3129449, 9959175, 16814702]; // Strava IDs of Nico, Sebastian, Tobias
+
+            function fetchPage(page = 1, acc = []) {
+                return $.getJSON(`${baseURL}&page=${page}`).then(res => {
+                    if (Array.isArray(res) && res.length) {
+                        acc.push(...res);
+                        if (res.length === itemsPerPage) {
+                            return fetchPage(page + 1, acc);
+                        }
+                    }
+                    return acc;
+                });
+            }
+
+            fetchPage().then(allSupporters => {
+                $(settings.mainSelector).empty();
+
+                // Shuffle the array (Fisher-Yates would be cleaner, but this is acceptable)
+                const shuffled = allSupporters.sort(() => Math.random() - 0.5);
+
+                let count = 0;
+
+                $.each(shuffled, function (_, val) {
+                    if (blockedIds.includes(val.oauth_id)) return;
+                    if (count >= settings.limit) return false; // break loop
+
+                    const html = `<a href="${val.oauth_link}" class="link-inline" target="_blank">${val.name}</a> `;
+                    $(settings.mainSelector).append(html);
+                    count++;
+                });
+
+            }).fail(err => console.error('Supporters fetch failed:', err));
+
+            return this;
+        };
+
+        function triggerRefresh($that) {
+            if (settings.refreshSeconds > 0) {
+                setInterval(() => {
+                    $that.loadContent();
+                }, settings.refreshSeconds * 1000);
+            }
+        }
+
+        if ($(settings.mainSelector).length) {
+            triggerRefresh(this);
+            this.loadContent();
+        }
+
+        return this;
+    };
+
+    $.fn.laceUpStarter = function (options) {
+
+        const settings = $.extend({
+            mainSelector: '.laceup-starter',
+            paidBadgeURL: 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg',
+            sex: ''           // can be overridden via options or data-attrs
+        }, this.data(), options);
+
+        /* --------------------------------------------------------- */
+        this.loadContent = function () {
+
+            const itemsPerPage = 50;
+            const baseURL =
+                `${settings.appUrl}/api/athletes.json`
+                + `?tour.slug=${settings.slug}`
+                + `&itemsPerPage=${itemsPerPage}`
+                + (settings.sex ? `&sex=${settings.sex}` : '');
+
+            /* ---------- recursive loader -------------------------- */
+            function fetchPage(page = 1, acc = []) {
+                return $.getJSON(`${baseURL}&page=${page}`).then(res => {
+                    if (Array.isArray(res) && res.length) {
+                        acc.push(...res);
+                        if (res.length === itemsPerPage) {
+                            return fetchPage(page + 1, acc);   // another page likely
+                        }
+                    }
+                    return acc; // finished
+                });
+            }
+
+            /* ---------- after all data arrived -------------------- */
+            fetchPage().then(fullData => {
+
+                $(settings.mainSelector).DataTable({
+                    retrieve: true,
+                    data: fullData,                    // << aggregated rows
+                    processing: true,
+                    conditionalPaging: true,
+                    lengthMenu: [[100, -1], [100, "Alle Teilnehmer"]],
+                    ordering: true,
+                    order: [[1, 'asc']],
+                    searching: false,
+                    info: false,
+                    language: { emptyTable: translate('no_results') },
+                    columns: [
+                        {
+                            title: "",
+                            data: "profile",
+                            render: function (data, type, row) {
+                                return `<div class="ranking-profile ${(row.paid ? 'ranking-profile-paid' : '')}">
+                                        <div class="profile-img"
+                                             style="background-image:url(${data}),url(https://static.laceup.ch/backgrounds/Running1.jpg);">
+                                             ${row.paid
+                                    ? `<a class="ranking-paid-badge" title="${translate('supporter')}"
+                                                       href="${settings.appUrl}/tour/${settings.slug}/donate">
+                                                       <img class="paid-badge" src="${settings.paidBadgeURL}">
+                                                   </a>` : ''}
+                                        </div>
+                                    </div>`;
+                            }
+                        },
+                        {
+                            title: "Name",
+                            data: "name",
+                            render: (name, type, row) =>
+                                `<a style="text-decoration:none;" href="${row.oauth_link}" target="_blank">${name}</a>`
+                        }
+                    ],
+                    columnDefs: [
+                        { targets: 0, width: '20%' },
+                        { targets: 1, width: '80%' }
+                    ]
+                }).on('page.dt', function () {
+                    $('html, body').animate({
+                        scrollTop: $(this).offset().top
+                    }, 'fast');
+                });
+
+            }).fail(err => console.error('Athletes fetch failed:', err));
 
             return this;
         };
@@ -1064,261 +1127,6 @@
         return this.loadContent();
     };
 
-
-    $.fn.laceUpTrophyRanking = function(options) {
-
-        this.laceUpOverallTrophyStageCompletion(options);
-    };
-
-
-    $.fn.laceUpOverallTrophyStageCompletion = function(options) {
-
-        var settings = $.extend({
-            mainSelector: '.laceup-trophy-ranking',
-            refreshSeconds: 240,
-            sex: 'X'
-        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
-
-        this.loadContent = function() {
-
-            $.getJSON(settings.appUrl + "/api/stages.json?tour.slug="+settings.slug, function(stagesData) {
-
-                let stagesDataById = [];
-                $.each(stagesData, function(key, stageData) {
-                    stagesDataById['stage-'+stageData.id] = stageData; //Prefix stage- to avoid integers as associative array keys
-                });
-
-                $(settings.mainSelector).each(function(index, el) { //data-sex="F", data-sex="M", .podium-laceup-stage-id (div element containing the stage id), data-limit="3"
-
-                    var eleSettings = $.extend({}, settings, $(el).data()); //check the elements data attribute for further settings
-
-                    //Allow overwriting the available badges
-                    var availableBadges = (eleSettings.badges !== undefined) ? eleSettings.badges.split(',').filter(element => element) : ["bee","bat","hare"];
-
-                    var apiURL = eleSettings.appUrl + "/api/trophies.json?tour.slug="+eleSettings.slug+"&type=stage_completion&sex="+eleSettings.sex+"&"+(eleSettings.limit?'itemsPerPage='+eleSettings.limit:'pagination=false');
-
-                    console.log(apiURL);
-
-                    $.getJSON(apiURL, function(response) {
-
-                            $(el).empty();
-
-                            $.each(response, function( key, val ) {
-
-                                console.log(val.data);
-
-                                //Note: if no stage, array [0]
-                                if(!val.data.distinct_stage_ids.length || val.data.distinct_stage_ids[0] === null){
-                                    return false; //break $.each
-                                }
-
-                                var athBadges = extractBadges(val.athlete.badges);
-                                var badgesHtml = '';
-
-                                //Possible completion batch to show how many / if all completed
-                                badgesHtml += '<div class="achieved-badge completion completed-n-'+val.data.distinct_stage_ids.length+'"></div>';
-
-                                $.each(availableBadges, function(key, thisBadge ) {
-
-                                    var isPassive = athBadges.includes(thisBadge) ? '' : 'achieved-badge-passive';
-                                    badgesHtml += '<div class="achieved-badge '+isPassive+' '+thisBadge+'"></div>';
-
-                                });
-
-                                var stagesHTML = '';
-                                $.each(val.data.distinct_stage_ids, function(key, stageId) {
-                                    if(stageId){
-                                        stagesHTML += '<div role="img" class="trophy-stage-badge trophy-stage-id-'+stageId+'" title="'+stagesDataById['stage-'+stageId].name+'"></div>';
-                                    }
-                                });
-
-                                var itemHTML =
-                                    '<div class="trophy-item trophy-rank-'+val.rank+' clearfix">'+
-                                        '<div class="trophy-rank '+(val.athlete.paid ? 'trophy-rank-paid' : '')+'">' +
-                                            '<div>'+val.rank+'</div>' +
-                                        '</div>'+
-                                        '<div class="trophy-name truncate">'+val.athlete.name+'</div>'+
-                                        '<div class="trophy-badges">'+badgesHtml+'</div>'+
-                                        '<div class="trophy-stages clearfix">'+stagesHTML+'</div>'+
-                                    '</div>';
-
-                                $(el).append(itemHTML);
-
-                            });
-
-                            if(!response.length){
-                                $(el).append('<p>'+translate('no_results')+'</p>');
-                            }
-
-                        });
-                });
-
-            });
-
-            return this;
-
-        };
-
-        function triggerRefresh($that)
-        {
-
-            if(settings.refreshSeconds > 0){ //set 0 to disable refresh
-
-                setInterval(function(){
-                    $that.loadContent();
-                }, 1000*settings.refreshSeconds);
-
-            }
-
-        }
-
-        triggerRefresh(this);
-
-        this.loadContent();
-
-        return this;
-
-    };
-
-    $.fn.laceUpSupporter = function(options) {
-
-        var settings = $.extend({
-            mainSelector: '#laceup-supporter',
-            refreshSeconds: 480,
-            limit: 1000
-        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
-
-        $.extend(settings, $(settings.mainSelector).data()); //check the mainSelector data attribute for further settings
-
-        this.loadContent = function() {
-
-            $.ajax({
-                url: settings.appUrl+"/api/athletes.json?tour.slug="+settings.slug+"&paid=true&pagination=false",
-                type: 'GET',
-                dataType: 'json',
-                success: function(supporterResponse) {
-
-                    $(settings.mainSelector).html("");
-
-                    const supporterResponseShuffled = supporterResponse.sort(()=> Math.random() - 0.5); //not perfect, but ok for a small array and no need for true randomness
-
-                    $.each(supporterResponseShuffled, function( key, val ) {
-
-                        if(val.oauth_id === 3129449) return; //Nico
-                        if(val.oauth_id === 9959175) return; //Sebastian
-                        if(val.oauth_id === 16814702) return; //Tobias
-
-                        $(settings.mainSelector).append("<a href='"+val.oauth_link+"' class='link-inline' target='_blank'>"+val.name+"</a> ");
-
-                    });
-
-                },
-                error: function(data) {
-                    console.log(data);
-                }
-            });
-
-            return this;
-
-        };
-
-        function triggerRefresh($that)
-        {
-
-            if(settings.refreshSeconds > 0){ //set 0 to disable refresh
-
-                setInterval(function(){
-                    $that.loadContent();
-                }, 1000*settings.refreshSeconds);
-
-            }
-
-        }
-
-        if($(settings.mainSelector).length) {
-
-            triggerRefresh(this);
-
-            this.loadContent();
-
-        }
-
-        return this;
-
-    };
-
-    $.fn.laceUpStarter = function(options) {
-
-        var settings = $.extend({
-            mainSelector: '.laceup-starter',
-            paidBadgeURL :'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
-        }, this.data(), options); //extend from the meta data properties and options variable (to set a different mainSelector)
-
-
-        this.loadContent = function() {
-
-            var apiURL = settings.appUrl+"/api/athletes.json?tour.slug="+settings.slug+"&pagination=false"+"&sex="+$(settings).data('sex');
-
-            console.log(apiURL);
-
-            $(settings.mainSelector).DataTable({
-                "retrieve": true,
-                "ajax": {
-                    url: apiURL,
-                    dataSrc: ""
-                },
-                "processing": true,
-                "conditionalPaging": true,
-                "lengthMenu": [[100, -1], [100, "Alle Teilnehmer"]],
-                "ordering": true,
-                order: [[1, 'asc']], //Default ordering (colIndex)
-                "searching": false,
-                "info": false,
-                "language": {
-                    "emptyTable": translate('no_results')
-                },
-                "columns": [
-                    {
-                        "title": "",
-                        "data": "profile",
-                        "render": function(data, type, row) {
-
-                            return '<div class="ranking-profile '+(row.paid ? 'ranking-profile-paid' : '')+'">'+
-                                '<div class="profile-img" style="background-image: url('+data+'), url(https://static.laceup.ch/backgrounds/Running1.jpg);">'+
-                                (row.paid ?
-                                    ('<a class="ranking-paid-badge" title="'+translate('supporter')+'" href="'+settings.appUrl+'/tour/'+settings.slug+'/donate"><img class="paid-badge" src="'+settings.paidBadgeURL+'"></a>') :
-                                    '')+
-                                '</div>'+
-                                '</div>';
-                        }
-                    },
-                    {
-                        "title": "Name",
-                        "data": "name",
-                        "render": function(name, type, row) {
-                            return '<a style="text-decoration: none;" href="'+row.oauth_link+'" target="_blank">'+name+'</a>';
-                        }
-                    }
-                ],
-                columnDefs: [
-                    { targets: 0, width: '20%' },
-                    { targets: 1, width: '80%' },
-                ]
-            }).on('page.dt', function() { //on pagination click, scroll to top of the table
-                $('html, body').animate({
-                    scrollTop: $(this).offset().top
-                }, 'fast');
-            });
-
-            return this;
-
-        };
-
-        this.loadContent();
-
-        return this;
-
-    };
 
 
     //https://app.laceup.io/api/stages/50.json
