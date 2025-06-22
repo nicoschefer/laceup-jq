@@ -8,6 +8,9 @@
 
     const ITEMS_PER_PAGE        = 50;
     const BLOCKED_SUPPORTER_IDS = [3129449, 9959175, 16814702]; // Nico, Sebastian, Tobias
+    const CFG          = {
+        paidBadgeURL  : 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
+    };
 
     /* --- Translations -------------------------------------------------- */
     const TRANSLATIONS = {
@@ -80,7 +83,7 @@
 
     /* 1) Basic init – sets URLs & language ------------------------------ */
     $.fn.laceUpInit = function (opt = {}) {
-        const cfg = { ...this.data(), ...opt };
+        const cfg = { ...CFG, ...this.data(), ...opt };
         if (cfg.language) currentLang = cfg.language;
 
         $('a.laceup-connect-link')
@@ -98,6 +101,7 @@
     /* 2) User status banner -------------------------------------------- */
     $.fn.laceUpUserStatus = function (opt = {}) {
         const cfg = {
+            ...CFG,
             refreshSeconds   : 240,
             signupBtnSelector: '.signupbutton',
             ...this.data(),
@@ -172,12 +176,12 @@
             mainSelector  : '#laceup-recentactivities',
             refreshSeconds: 120,
             lastActivities: 20,
-            paidBadgeURL  : 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg',
             ...this.data(),
             ...opt
         };
         // Merge any data attributes from the target element (if it exists)
         const cfg   = {
+            ...CFG,
             ...cfgBase,
             ...($(cfgBase.mainSelector).data() || {})
         };
@@ -279,6 +283,7 @@
     /* 4a) Leaderboard --------------------------------------------------- */
     $.fn.laceUpLeaderboard = function (opt = {}) {
         const cfg = {
+            ...CFG,
             mainSelector  : '.laceup-leaderboard',
             refreshSeconds: 240,
             limit         : 10,
@@ -327,6 +332,7 @@
     /* 4b) Stage podium (TOP 3) ----------------------------------------- */
     $.fn.laceUpStagePodium = function (opt = {}) {
         const cfg = {
+            ...CFG,
             mainSelector  : '.laceup-podium',
             refreshSeconds: 240,
             limit         : 3,
@@ -368,7 +374,7 @@
 
     /* 5) Stage ranking (DataTable) ------------------------------------- */
     $.fn.laceUpStageRanking = function (opt = {}) {
-        const cfg = { mainSelector: '.laceup-stageranking', paidBadgeURL  : 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg', ...this.data(), ...opt };
+        const cfg = { ...CFG, mainSelector: '.laceup-stageranking', ...this.data(), ...opt };
 
         function loadTable() {
             $(`${cfg.mainSelector}:not([data-stageid=""])`).each((_, el) => {
@@ -518,7 +524,7 @@
     }
 
     $.fn.laceUpOverallRanking = function (opt = {}) {
-        const cfg = { mainSelector: '.laceup-ranking', paidBadgeURL  : 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg', ...this.data(), ...opt };
+        const cfg = { ...CFG, mainSelector: '.laceup-ranking', ...this.data(), ...opt };
 
         $(cfg.mainSelector).each((_, el) => {
             const eCfg = { ...cfg, ...$(el).data() };
@@ -531,7 +537,7 @@
     };
 
     $.fn.laceUpOverallRankingWithBadges = function (opt = {}) {
-        const cfg = { mainSelector: '.laceup-ranking', ...this.data(), ...opt };
+        const cfg = { ...CFG, mainSelector: '.laceup-ranking', ...this.data(), ...opt };
 
         $(cfg.mainSelector).each((_, el) => {
             const eCfg = { ...cfg, ...$(el).data() };
@@ -552,7 +558,7 @@
             ...this.data(),
             ...opt
         };
-        const cfg = { ...cfgBase, ...($(cfgBase.mainSelector).data() || {}) };
+        const cfg = { ...CFG,...cfgBase, ...($(cfgBase.mainSelector).data() || {}) };
         const $root = this;
 
         function loadSupporters() {
@@ -580,7 +586,7 @@
 
     /* 8) Starter list (DataTable) -------------------------------------- */
     $.fn.laceUpStarter = function (opt = {}) {
-        const cfg = { mainSelector: '.laceup-starter', paidBadgeURL  : 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg', sex: '', ...this.data(), ...opt };
+        const cfg = { ...CFG, mainSelector: '.laceup-starter', sex: '', ...this.data(), ...opt };
 
         const base = `${cfg.appUrl}/api/athletes.json?tour.slug=${cfg.slug}&itemsPerPage=${ITEMS_PER_PAGE}` +
             (cfg.sex ? `&sex=${cfg.sex}` : '');
