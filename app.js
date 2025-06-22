@@ -6,8 +6,8 @@
      *  Shared constants & helpers
      * ------------------------------------------------------------------- */
 
-    const ITEMS_PER_PAGE           = 50;
-    const BLOCKED_SUPPORTER_IDS    = [3129449, 9959175, 16814702];   // Nico, Sebastian, Tobias
+    const ITEMS_PER_PAGE        = 50;
+    const BLOCKED_SUPPORTER_IDS = [3129449, 9959175, 16814702]; // Nico, Sebastian, Tobias
 
     /* --- Translations -------------------------------------------------- */
     const TRANSLATIONS = {
@@ -65,11 +65,11 @@
     /* --- DataTables convenience wrapper -------------------------------- */
     function buildDataTable($el, data, extra = {}) {
         return $el.DataTable({
-            retrieve: true,
+            retrieve : true,
             data,
             processing: true,
-            searching: false,
-            info: false,
+            searching : false,
+            info      : false,
             ...extra
         });
     }
@@ -80,33 +80,39 @@
 
     /* 1) Basic init – sets URLs & language ------------------------------ */
     $.fn.laceUpInit = function (opt = {}) {
-        const cfg = $.extend(this.data(), opt);
+        const cfg = { ...this.data(), ...opt };
         if (cfg.language) currentLang = cfg.language;
 
-        $('a.laceup-connect-link').attr('href', `${cfg.appUrl}/tour/${cfg.slug}/connect`);
-        $('a.laceup-profile-link').attr('href', `${cfg.appUrl}/tour/${cfg.slug}/profile`);
-        $('a.laceup-donate-link').attr('href', `${cfg.appUrl}/tour/${cfg.slug}/donate`);
-        $('a.laceup-stravaclub-link').attr('href', cfg.stravaclubLink);
+        $('a.laceup-connect-link')
+            .attr('href', `${cfg.appUrl}/tour/${cfg.slug}/connect`);
+        $('a.laceup-profile-link')
+            .attr('href', `${cfg.appUrl}/tour/${cfg.slug}/profile`);
+        $('a.laceup-donate-link')
+            .attr('href', `${cfg.appUrl}/tour/${cfg.slug}/donate`);
+        $('a.laceup-stravaclub-link')
+            .attr('href', cfg.stravaclubLink);
 
         return this;
     };
 
     /* 2) User status banner -------------------------------------------- */
     $.fn.laceUpUserStatus = function (opt = {}) {
-        const cfg = $.extend({
-            refreshSeconds: 240,
-            signupBtnSelector: '.signupbutton'
-        }, this.data(), opt);
+        const cfg = {
+            refreshSeconds   : 240,
+            signupBtnSelector: '.signupbutton',
+            ...this.data(),
+            ...opt
+        };
 
         const $root = this;
 
         function updateUI(data = {}) {
-            const isTourUser  = data.tour?.slug === cfg.slug;
-            const isPaid      = isTourUser && data.paid;
-            const isKnown     = isTourUser && !!data.id;
+            const isTourUser = data.tour?.slug === cfg.slug;
+            const isPaid     = isTourUser && data.paid;
+            const isKnown    = isTourUser && !!data.id;
 
             $('.laceup-show-if-paid-user').toggle(isPaid);
-            $('.laceup-show-if-free-user' ).toggle(isKnown && !isPaid);
+            $('.laceup-show-if-free-user').toggle(isKnown && !isPaid);
             $('.laceup-show-if-known-user').toggle(isKnown);
             $('.laceup-show-if-unknown-user').toggle(!isKnown);
 
@@ -115,16 +121,17 @@
                     $(this).text(
                         $(this).text()
                             .replace('$$firstname$$', data.firstname)
-                            .replace('$$lastname$$', data.lastname)
+                            .replace('$$lastname$$',  data.lastname)
                     );
                 });
             }
 
             // personalised CTA button
             $(cfg.signupBtnSelector).each(function () {
-                const $btn  = $(this);
-                const text  = isPaid ? $btn.data('text-profile') : $btn.data('text-support');
-                const url   = isPaid
+                const $btn = $(this);
+                const text = isPaid ? $btn.data('text-profile')
+                    : $btn.data('text-support');
+                const url  = isPaid
                     ? `${cfg.appUrl}/tour/${cfg.slug}/profile`
                     : `${cfg.appUrl}/tour/${cfg.slug}/donate`;
                 $btn.text(text).attr('href', url);
@@ -141,10 +148,10 @@
 
         function loadStatus() {
             $.ajax({
-                url: `${cfg.appUrl}/api/me.json`,
-                dataType: 'json',
-                headers : { 'X-Requested-With': 'XMLHttpRequest' },
-                xhrFields: { withCredentials: true },
+                url       : `${cfg.appUrl}/api/me.json`,
+                dataType  : 'json',
+                headers   : { 'X-Requested-With': 'XMLHttpRequest' },
+                xhrFields : { withCredentials: true },
                 statusCode: {
                     200: updateUI,
                     401: () => updateUI(),
@@ -161,13 +168,19 @@
 
     /* 3) Recent activities (GraphQL) ----------------------------------- */
     $.fn.laceUpRecentActivities = function (opt = {}) {
-        const cfg = $.extend({
+        const cfgBase = {
             mainSelector  : '#laceup-recentactivities',
             refreshSeconds: 120,
             lastActivities: 20,
-            paidBadgeURL  : 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg'
-        }, this.data(), opt, $(opt.mainSelector).data());
-
+            paidBadgeURL  : 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg',
+            ...this.data(),
+            ...opt
+        };
+        // Merge any data attributes from the target element (if it exists)
+        const cfg   = {
+            ...cfgBase,
+            ...($(cfgBase.mainSelector).data() || {})
+        };
         const $root = this;
 
         function loadActivities() {
@@ -192,28 +205,35 @@
                 data       : JSON.stringify({ query })
             }).done(res => {
                 const $tpl = $(`${cfg.mainSelector} .recent-item`).first().clone();
-                $(`${cfg.mainSelector} .recent-item`).remove();        // clear list
+                $(`${cfg.mainSelector} .recent-item`).remove(); // clear list
 
                 res.data.efforts.edges.forEach(({ node }) => {
-                    const ago  = moment(node.start_date).fromNow();
-                    const rank = node.ranking?.rank;
+                    const ago     = moment(node.start_date).fromNow();
+                    const rank    = node.ranking?.rank;
                     const rankCls = rank && rank <= 3 ? `recent-ranking-${rank}` : '';
 
-                    const $item = $tpl.clone().toggleClass('recent-item-paid', !!node.athlete.paid);
+                    const $item = $tpl.clone()
+                        .toggleClass('recent-item-paid', !!node.athlete.paid);
+
                     $item.find('.recent-profile').html(
                         `<div class="profile-img" style="background-image:url(${node.athlete.profile});">
                             ${node.athlete.paid
-                            ? `<a title="${translate('supporter')}" href="${cfg.appUrl}/tour/${cfg.slug}/donate">
-                                      <img class="paid-badge" src="${cfg.paidBadgeURL}">
-                                   </a>` : ''}
+                            ? `<a title="${translate('supporter')}"
+                                      href="${cfg.appUrl}/tour/${cfg.slug}/donate">
+                                       <img class="paid-badge" alt="Supporter" src="${cfg.paidBadgeURL}">
+                                   </a>`
+                            : ''}
                          </div>`
                     );
                     $item.find('.recent-date').text(ago);
                     $item.find('.recent-name').text(node.athlete.name);
                     $item.find('.recent-stage').text(node.stage.name);
                     $item.find('.recent-time').html(
-                        `<a target="_blank" href="${node.effort_strava_link}" title="Rang ${rank ?? '-'}">
-                           <span class="recent-ranking ${rankCls}">${node.ranking_time}</span>
+                        `<a target="_blank" href="${node.effort_strava_link}"
+                            title="Rang ${rank ?? '-'}">
+                            <span class="recent-ranking ${rankCls}">
+                                ${node.ranking_time}
+                            </span>
                          </a>`
                     );
                     $(`${cfg.mainSelector} .recent-wrapper`).prepend($item);
@@ -242,33 +262,43 @@
                     </div>
                     <div class="result-name truncate">
                         ${r.athlete.name}<br>
-                        <small class="paragraph-light paragraph-small">${r.number_of_stages} Etappe(n)</small>
+                        <small class="paragraph-light paragraph-small">
+                            ${r.number_of_stages} Etappe(n)
+                        </small>
                     </div>
                     <div class="result-time">
                         ${r.ranking_time}<br>
-                        <small class="paragraph-light paragraph-small" style="float:right;">${lag}</small>
+                        <small class="paragraph-light paragraph-small" style="float:right;">
+                            ${lag}
+                        </small>
                     </div>
                 </div>`;
     }
 
     /* 4a) Leaderboard --------------------------------------------------- */
     $.fn.laceUpLeaderboard = function (opt = {}) {
-        const cfg = $.extend({
+        const cfg = {
             mainSelector  : '.laceup-leaderboard',
             refreshSeconds: 240,
-            limit         : 10
-        }, this.data(), opt);
-
+            limit         : 10,
+            ...this.data(),
+            ...opt
+        };
         const $root = this;
 
         function loadLeaderboard() {
             $(cfg.mainSelector).each((_, el) => {
-                const eCfg = $.extend({}, cfg, $(el).data());
+                const eCfg = { ...cfg, ...$(el).data() };
                 const query = `{
-                    overallRankings(tour_slug: "${eCfg.slug}", sex: "${$(el).data('sex')}", first: ${eCfg.limit}) {
+                    overallRankings(tour_slug: "${eCfg.slug}",
+                                    sex: "${$(el).data('sex')}",
+                                    first: ${eCfg.limit}) {
                         edges {
-                            node { stage_lag time_to_first_formatted time_to_first rank number_of_stages ranking_time
-                                   athlete { name paid } }
+                            node {
+                                stage_lag time_to_first_formatted time_to_first
+                                rank number_of_stages ranking_time
+                                athlete { name paid }
+                            }
                         }
                     }
                 }`;
@@ -295,24 +325,37 @@
 
     /* 4b) Stage podium (TOP 3) ----------------------------------------- */
     $.fn.laceUpStagePodium = function (opt = {}) {
-        const cfg = $.extend({ mainSelector: '.laceup-podium', refreshSeconds: 240, limit: 3 }, this.data(), opt);
+        const cfg = {
+            mainSelector  : '.laceup-podium',
+            refreshSeconds: 240,
+            limit         : 3,
+            ...this.data(),
+            ...opt
+        };
         const $root = this;
 
         function loadPodium() {
             $(cfg.mainSelector).each((_, el) => {
-                const eCfg   = $.extend({}, cfg, $(el).data());
-                const stageId = $(el).closest('.podium-item').find('.podium-laceup-stage-id').text();
-                $.getJSON(`${eCfg.appUrl}/api/rankings?stage.id=${stageId}&sex=${$(el).data('sex')}&itemsPerPage=${eCfg.limit}`)
+                const eCfg   = { ...cfg, ...$(el).data() };
+                const stageId = $(el).closest('.podium-item')
+                    .find('.podium-laceup-stage-id')
+                    .text();
+
+                $.getJSON(`${eCfg.appUrl}/api/rankings?stage.id=${stageId}` +
+                    `&sex=${$(el).data('sex')}&itemsPerPage=${eCfg.limit}`)
                     .done(rows => rows.forEach((row, idx) => {
                         const $item = $(el).find(`.result-rank-${idx + 1}`);
                         $item.find('.result-rank > div').text(row.rank);
                         $item.find('.result-name').text(row.athlete.name);
                         $item.find('.result-time').html(
-                            `<a target="_blank" style="font-family:monospace;text-decoration:none;" href="${row.effort.effort_strava_link}">
+                            `<a target="_blank"
+                                style="font-family:monospace;text-decoration:none;"
+                                href="${row.effort.effort_strava_link}">
                                 ${row.ranking_time}
                              </a>`
                         );
-                        $item.removeClass(`result-rank-${idx + 1}`).addClass(`result-rank-${row.rank}`);
+                        $item.removeClass(`result-rank-${idx + 1}`)
+                            .addClass(`result-rank-${row.rank}`);
                     }));
             });
         }
@@ -324,12 +367,13 @@
 
     /* 5) Stage ranking (DataTable) ------------------------------------- */
     $.fn.laceUpStageRanking = function (opt = {}) {
-        const cfg = $.extend({ mainSelector: '.laceup-stageranking' }, this.data(), opt);
+        const cfg = { mainSelector: '.laceup-stageranking', ...this.data(), ...opt };
 
         function loadTable() {
-            $(cfg.mainSelector + ':not([data-stageid=""])').each((_, el) => {
-                const eCfg = $.extend({}, cfg, $(el).data());
-                const base = `${eCfg.appUrl}/api/rankings?stage.id=${$(el).data('stageid')}&sex=${$(el).data('sex')}&itemsPerPage=${ITEMS_PER_PAGE}`;
+            $(`${cfg.mainSelector}:not([data-stageid=""])`).each((_, el) => {
+                const eCfg = { ...cfg, ...$(el).data() };
+                const base = `${eCfg.appUrl}/api/rankings?stage.id=${$(el).data('stageid')}` +
+                    `&sex=${$(el).data('sex')}&itemsPerPage=${ITEMS_PER_PAGE}`;
 
                 fetchAllPages(base).then(rows => {
                     buildDataTable($(el), rows, {
@@ -344,10 +388,14 @@
                                     return `<div class="ranking-profile ${row.athlete.paid ? 'ranking-profile-paid' : ''}">
                                                 <div class="profile-img" style="background-image:url(${data});">
                                                     ${row.athlete.paid
-                                        ? `<a class="ranking-paid-badge" title="${translate('supporter')}"
+                                        ? `<a class="ranking-paid-badge"
+                                                             title="${translate('supporter')}"
                                                              href="${eCfg.appUrl}/tour/${eCfg.slug}/donate">
-                                                             <img class="paid-badge" alt="Supporter badge" src="${eCfg.paidBadgeURL}">
-                                                           </a>` : ''}
+                                                                <img class="paid-badge"
+                                                                     alt="Supporter badge"
+                                                                     src="${eCfg.paidBadgeURL}">
+                                                           </a>`
+                                        : ''}
                                                 </div>
                                             </div>`;
                                 }
@@ -355,12 +403,15 @@
                             {
                                 title: 'Name',
                                 data : 'athlete.name',
-                                render: (n, _, row) => `<a style="text-decoration:none;" href="${row.athlete.oauth_link}" target="_blank">${n}</a>`
+                                render: (n, _, row) => `<a style="text-decoration:none;"
+                                                           href="${row.athlete.oauth_link}"
+                                                           target="_blank">${n}</a>`
                             },
                             {
                                 title: 'Zeit',
                                 data : 'ranking_time',
-                                render: (d, _, row) => `<a style="font-family:monospace;text-decoration:none;" target="_blank"
+                                render: (d, _, row) => `<a style="font-family:monospace;text-decoration:none;"
+                                                           target="_blank"
                                                            href="${row.effort.effort_strava_link}">${d}</a>`
                             }
                         ],
@@ -371,7 +422,7 @@
                             { targets: -1, className: 'dt-body-right', width: '35%' }
                         ]
                     }).on('page.dt', () =>
-                        $('html, body').animate({ scrollTop: $(el).offset().top }, 'fast')
+                        $('html, body').animate({ scrollTop: $(el).offset().top }, 200)
                     );
                 });
             });
@@ -390,18 +441,22 @@
         buildDataTable($el, rows, {
             responsive: true,
             paging    : false,
-            columns   : [
+            columns: [
                 { title: '', data: 'rank' },
                 {
-                    title : '',
-                    data  : 'athlete.profile',
+                    title: '',
+                    data : 'athlete.profile',
                     render(data, _, row) {
                         return `<div class="ranking-profile ${row.athlete.paid ? 'ranking-profile-paid' : ''}">
                                     <div class="profile-img" style="background-image:url(${data});">
                                         ${row.athlete.paid
-                            ? `<a title="${translate('supporter')}" href="${cfg.appUrl}/tour/${cfg.slug}/donate">
-                                                   <img class="paid-badge" alt="Supporter badge" src="${cfg.paidBadgeURL}">
-                                               </a>` : ''}
+                            ? `<a title="${translate('supporter')}"
+                                                  href="${cfg.appUrl}/tour/${cfg.slug}/donate">
+                                                    <img class="paid-badge"
+                                                         alt="Supporter badge"
+                                                         src="${cfg.paidBadgeURL}">
+                                               </a>`
+                            : ''}
                                     </div>
                                 </div>`;
                     }
@@ -409,7 +464,9 @@
                 {
                     title : translate('athlete.name'),
                     data  : 'athlete.name',
-                    render: (name, _, row) => `<a style="text-decoration:none;" href="${row.athlete.oauth_link}" target="_blank">${name}</a>`
+                    render: (name, _, row) => `<a style="text-decoration:none;"
+                                                  href="${row.athlete.oauth_link}"
+                                                  target="_blank">${name}</a>`
                 },
                 { title: translate('number_of_stages'), data: 'number_of_stages' },
                 withBadges
@@ -435,7 +492,7 @@
                         return `<span class="ranking-time ranking-time-back">${lag}</span>`;
                     }
                 }
-            ].filter(Boolean),  // drop null columns
+            ].filter(Boolean),
             columnDefs: [
                 { responsivePriority: 1, targets: 0, width: '5%' },
                 { responsivePriority: 4, targets: 1, width: '10%' },
@@ -448,7 +505,9 @@
                 api.column(3, { page: 'current' }).data().each(function (grp, i) {
                     if (last !== grp) {
                         $(rows).eq(i).before(
-                            `<tr style="text-align:center;"><td colspan="7"><small>${grp} ${translate('n_stages')}</small></td></tr>`
+                            `<tr style="text-align:center;">
+                                <td colspan="7"><small>${grp} ${translate('n_stages')}</small></td>
+                             </tr>`
                         );
                         last = grp;
                     }
@@ -458,11 +517,12 @@
     }
 
     $.fn.laceUpOverallRanking = function (opt = {}) {
-        const cfg = $.extend({ mainSelector: '.laceup-ranking' }, this.data(), opt);
+        const cfg = { mainSelector: '.laceup-ranking', ...this.data(), ...opt };
 
         $(cfg.mainSelector).each((_, el) => {
-            const eCfg  = $.extend({}, cfg, $(el).data());
-            const base  = `${eCfg.appUrl}/api/overall_rankings?tour.slug=${eCfg.slug}&sex=${$(el).data('sex')}&itemsPerPage=${ITEMS_PER_PAGE}`;
+            const eCfg = { ...cfg, ...$(el).data() };
+            const base = `${eCfg.appUrl}/api/overall_rankings?tour.slug=${eCfg.slug}` +
+                `&sex=${$(el).data('sex')}&itemsPerPage=${ITEMS_PER_PAGE}`;
             fetchAllPages(base).then(rows => buildOverallTable($(el), rows, eCfg, false));
         });
 
@@ -470,11 +530,12 @@
     };
 
     $.fn.laceUpOverallRankingWithBadges = function (opt = {}) {
-        const cfg = $.extend({ mainSelector: '.laceup-ranking' }, this.data(), opt);
+        const cfg = { mainSelector: '.laceup-ranking', ...this.data(), ...opt };
 
         $(cfg.mainSelector).each((_, el) => {
-            const eCfg = $.extend({}, cfg, $(el).data());
-            const base = `${eCfg.appUrl}/api/overall_rankings?tour.slug=${eCfg.slug}&sex=${$(el).data('sex')}&itemsPerPage=${ITEMS_PER_PAGE}`;
+            const eCfg = { ...cfg, ...$(el).data() };
+            const base = `${eCfg.appUrl}/api/overall_rankings?tour.slug=${eCfg.slug}` +
+                `&sex=${$(el).data('sex')}&itemsPerPage=${ITEMS_PER_PAGE}`;
             fetchAllPages(base).then(rows => buildOverallTable($(el), rows, eCfg, true));
         });
 
@@ -483,11 +544,19 @@
 
     /* 7) Supporter ticker ---------------------------------------------- */
     $.fn.laceUpSupporter = function (opt = {}) {
-        const cfg = $.extend({ mainSelector: '#laceup-supporter', refreshSeconds: 480, limit: 1000 }, this.data(), opt, $(opt.mainSelector).data());
+        const cfgBase = {
+            mainSelector  : '#laceup-supporter',
+            refreshSeconds: 480,
+            limit         : 1000,
+            ...this.data(),
+            ...opt
+        };
+        const cfg = { ...cfgBase, ...($(cfgBase.mainSelector).data() || {}) };
         const $root = this;
 
         function loadSupporters() {
-            const base = `${cfg.appUrl}/api/athletes.json?tour.slug=${cfg.slug}&paid=true&itemsPerPage=${ITEMS_PER_PAGE}`;
+            const base = `${cfg.appUrl}/api/athletes.json?tour.slug=${cfg.slug}` +
+                `&paid=true&itemsPerPage=${ITEMS_PER_PAGE}`;
             fetchAllPages(base).then(all => {
                 const list = all
                     .filter(a => !BLOCKED_SUPPORTER_IDS.includes(a.oauth_id))
@@ -495,7 +564,8 @@
                     .slice(0, cfg.limit);
 
                 $(cfg.mainSelector).html(
-                    list.map(a => `<a href="${a.oauth_link}" class="link-inline" target="_blank">${a.name}</a>`).join(' ')
+                    list.map(a => `<a href="${a.oauth_link}" class="link-inline" target="_blank">${a.name}</a>`)
+                        .join(' ')
                 );
             });
         }
@@ -509,7 +579,7 @@
 
     /* 8) Starter list (DataTable) -------------------------------------- */
     $.fn.laceUpStarter = function (opt = {}) {
-        const cfg = $.extend({ mainSelector: '.laceup-starter', sex: '' }, this.data(), opt);
+        const cfg = { mainSelector: '.laceup-starter', sex: '', ...this.data(), ...opt };
 
         const base = `${cfg.appUrl}/api/athletes.json?tour.slug=${cfg.slug}&itemsPerPage=${ITEMS_PER_PAGE}` +
             (cfg.sex ? `&sex=${cfg.sex}` : '');
@@ -522,15 +592,18 @@
                 order            : [[1, 'asc']],
                 columns: [
                     {
-                        title : '',
-                        data  : 'profile',
+                        title: '',
+                        data : 'profile',
                         render(data, _, row) {
                             return `<div class="ranking-profile ${row.paid ? 'ranking-profile-paid' : ''}">
                                         <div class="profile-img" style="background-image:url(${data});">
                                             ${row.paid
-                                ? `<a class="ranking-paid-badge" title="${translate('supporter')}"
-                                                     href="${cfg.appUrl}/tour/${cfg.slug}/donate">
-                                                     <img class="paid-badge" alt="Supporter badge" src="${cfg.paidBadgeURL}">
+                                ? `<a class="ranking-paid-badge"
+                                                      title="${translate('supporter')}"
+                                                      href="${cfg.appUrl}/tour/${cfg.slug}/donate">
+                                                        <img class="paid-badge"
+                                                             alt="Supporter badge"
+                                                             src="${cfg.paidBadgeURL}">
                                                    </a>`
                                 : ''}
                                         </div>
@@ -540,7 +613,9 @@
                     {
                         title : 'Name',
                         data  : 'name',
-                        render: (n, _, row) => `<a style="text-decoration:none;" href="${row.oauth_link}" target="_blank">${n}</a>`
+                        render: (n, _, row) => `<a style="text-decoration:none;"
+                                                   href="${row.oauth_link}"
+                                                   target="_blank">${n}</a>`
                     }
                 ],
                 columnDefs: [
