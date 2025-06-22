@@ -215,7 +215,7 @@
                     const $item = $tpl.clone()
                         .toggleClass('recent-item-paid', !!node.athlete.paid);
 
-                    const encodedProfileUrl = encodeURI(node.athlete.profile);
+                    const encodedProfileUrl = encodeURI(node.athlete.profile); // Ensure URL is properly encoded if gravatar contains ? character
 
                     $item.find('.recent-profile').html(
                         `<div class="profile-img" style="background-image:url('${encodedProfileUrl}');">
@@ -368,7 +368,7 @@
 
     /* 5) Stage ranking (DataTable) ------------------------------------- */
     $.fn.laceUpStageRanking = function (opt = {}) {
-        const cfg = { mainSelector: '.laceup-stageranking', ...this.data(), ...opt };
+        const cfg = { mainSelector: '.laceup-stageranking', paidBadgeURL  : 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg', ...this.data(), ...opt };
 
         function loadTable() {
             $(`${cfg.mainSelector}:not([data-stageid=""])`).each((_, el) => {
@@ -518,7 +518,7 @@
     }
 
     $.fn.laceUpOverallRanking = function (opt = {}) {
-        const cfg = { mainSelector: '.laceup-ranking', ...this.data(), ...opt };
+        const cfg = { mainSelector: '.laceup-ranking', paidBadgeURL  : 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg', ...this.data(), ...opt };
 
         $(cfg.mainSelector).each((_, el) => {
             const eCfg = { ...cfg, ...$(el).data() };
@@ -580,7 +580,7 @@
 
     /* 8) Starter list (DataTable) -------------------------------------- */
     $.fn.laceUpStarter = function (opt = {}) {
-        const cfg = { mainSelector: '.laceup-starter', sex: '', ...this.data(), ...opt };
+        const cfg = { mainSelector: '.laceup-starter', paidBadgeURL  : 'https://nicoschefer.github.io/laceup-jq/img/paid-badge.svg', sex: '', ...this.data(), ...opt };
 
         const base = `${cfg.appUrl}/api/athletes.json?tour.slug=${cfg.slug}&itemsPerPage=${ITEMS_PER_PAGE}` +
             (cfg.sex ? `&sex=${cfg.sex}` : '');
