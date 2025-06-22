@@ -215,15 +215,16 @@
                     const $item = $tpl.clone()
                         .toggleClass('recent-item-paid', !!node.athlete.paid);
 
+                    const encodedProfileUrl = encodeURI(node.athlete.profile);
+
                     $item.find('.recent-profile').html(
-                        `<div class="profile-img" style="background-image:url(${node.athlete.profile});">
+                        `<div class="profile-img" style="background-image:url('${encodedProfileUrl}');">
                             ${node.athlete.paid
-                            ? `<a title="${translate('supporter')}"
-                                      href="${cfg.appUrl}/tour/${cfg.slug}/donate">
-                                       <img class="paid-badge" alt="Supporter" src="${cfg.paidBadgeURL}">
-                                   </a>`
+                            ? `<a title="${translate('supporter')}" href="${cfg.appUrl}/tour/${cfg.slug}/donate">
+                                    <img class="paid-badge" alt="Supporter" src="${cfg.paidBadgeURL}">
+                                </a>`
                             : ''}
-                         </div>`
+                        </div>`
                     );
                     $item.find('.recent-date').text(ago);
                     $item.find('.recent-name').text(node.athlete.name);
