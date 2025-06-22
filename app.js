@@ -84,6 +84,7 @@
         if (cfg.language) currentLang = cfg.language;
 
         $('a.laceup-connect-link').attr('href', `${cfg.appUrl}/tour/${cfg.slug}/connect`);
+        $('a.laceup-profile-link').attr('href', `${cfg.appUrl}/tour/${cfg.slug}/profile`);
         $('a.laceup-donate-link').attr('href', `${cfg.appUrl}/tour/${cfg.slug}/donate`);
         $('a.laceup-stravaclub-link').attr('href', cfg.stravaclubLink);
 
@@ -345,7 +346,7 @@
                                                     ${row.athlete.paid
                                         ? `<a class="ranking-paid-badge" title="${translate('supporter')}"
                                                              href="${eCfg.appUrl}/tour/${eCfg.slug}/donate">
-                                                             <img class="paid-badge" src="${eCfg.paidBadgeURL}">
+                                                             <img class="paid-badge" alt="Supporter badge" src="${eCfg.paidBadgeURL}">
                                                            </a>` : ''}
                                                 </div>
                                             </div>`;
@@ -399,7 +400,7 @@
                                     <div class="profile-img" style="background-image:url(${data});">
                                         ${row.athlete.paid
                             ? `<a title="${translate('supporter')}" href="${cfg.appUrl}/tour/${cfg.slug}/donate">
-                                                   <img class="paid-badge" src="${cfg.paidBadgeURL}">
+                                                   <img class="paid-badge" alt="Supporter badge" src="${cfg.paidBadgeURL}">
                                                </a>` : ''}
                                     </div>
                                 </div>`;
@@ -529,7 +530,7 @@
                                             ${row.paid
                                 ? `<a class="ranking-paid-badge" title="${translate('supporter')}"
                                                      href="${cfg.appUrl}/tour/${cfg.slug}/donate">
-                                                     <img class="paid-badge" src="${cfg.paidBadgeURL}">
+                                                     <img class="paid-badge" alt="Supporter badge" src="${cfg.paidBadgeURL}">
                                                    </a>`
                                 : ''}
                                         </div>
