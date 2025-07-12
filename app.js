@@ -189,8 +189,8 @@
 
         function loadActivities() {
             const query = `{
-                efforts(last: ${cfg.lastActivities},
-                        order: {start_date: "asc"},
+                efforts(first: ${cfg.lastActivities},
+                        order: {start_date: "desc"},
                         stage_tour_slug: "${cfg.slug}") {
                     edges {
                         node {
