@@ -241,7 +241,7 @@
                             </span>
                          </a>`
                     );
-                    $(`${cfg.mainSelector} .recent-wrapper`).prepend($item);
+                    $(`${cfg.mainSelector} .recent-wrapper`).append($item);
                 });
             });
         }
