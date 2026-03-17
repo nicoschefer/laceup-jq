@@ -115,7 +115,7 @@
             const isPaid     = isTourUser && data.paid;
             const isKnown    = isTourUser && !!data.id;
 
-            $('.laceup-show-if-paid-user').toggle(isPaid);
+            $('.laceup-show-if-paid-user').toggle(isKnown && isPaid);
             $('.laceup-show-if-free-user').toggle(isKnown && !isPaid);
             $('.laceup-show-if-known-user').toggle(isKnown);
             $('.laceup-show-if-unknown-user').toggle(!isKnown);
@@ -134,7 +134,7 @@
             $(cfg.signupBtnSelector).each(function () {
                 const $btn = $(this);
 
-                if(isKnown){ //Only change to rpofile/support if user is known
+                if(isKnown){ //Only change to profile/support if user is known
                     const text = isPaid ? $btn.data('text-profile')
                         : $btn.data('text-support');
                     const url  = isPaid
