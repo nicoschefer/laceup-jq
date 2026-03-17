@@ -120,13 +120,17 @@
             $('.laceup-show-if-known-user').toggle(isKnown);
             $('.laceup-show-if-unknown-user').toggle(!isKnown);
 
-            if (isKnown && data.firstname) {
+            if (isKnown) {
+                const firstname = data.firstname || '';
+                const lastname  = data.lastname  || '';
+
                 $('.laceup-profile-placeholder').each(function () {
-                    $(this).text(
-                        $(this).text()
-                            .replace('$$firstname$$', data.firstname)
-                            .replace('$$lastname$$',  data.lastname)
-                    );
+                    const $el = $(this);
+                    const text = $el.text()
+                        .replace('$$firstname$$', firstname)
+                        .replace('$$lastname$$', lastname);
+
+                    $el.text(text);
                 });
             }
 
