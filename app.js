@@ -123,12 +123,14 @@
             if (isKnown) {
                 const firstname = data.firstname || '';
                 const lastname  = data.lastname  || '';
+                const name  = data.name  || '';
 
                 $('.laceup-profile-placeholder').each(function () {
                     const $el = $(this);
                     const text = $el.text()
                         .replace('$$firstname$$', firstname)
-                        .replace('$$lastname$$', lastname);
+                        .replace('$$lastname$$', lastname)
+                        .replace('$$name$$', name);
 
                     $el.text(text);
                 });
