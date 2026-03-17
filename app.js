@@ -133,12 +133,16 @@
             // personalised CTA button
             $(cfg.signupBtnSelector).each(function () {
                 const $btn = $(this);
-                const text = isPaid ? $btn.data('text-profile')
-                    : $btn.data('text-support');
-                const url  = isPaid
-                    ? `${cfg.appUrl}/tour/${cfg.slug}/profile`
-                    : `${cfg.appUrl}/tour/${cfg.slug}/donate`;
-                $btn.text(text).attr('href', url);
+
+                if(isKnown){ //Only change to rpofile/support if user is known
+                    const text = isPaid ? $btn.data('text-profile')
+                        : $btn.data('text-support');
+                    const url  = isPaid
+                        ? `${cfg.appUrl}/tour/${cfg.slug}/profile`
+                        : `${cfg.appUrl}/tour/${cfg.slug}/donate`;
+                    $btn.text(text).attr('href', url);
+                }
+
             });
 
             // join/support banners
